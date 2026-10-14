@@ -1,0 +1,2535 @@
+% =====================================================================
+%  Supplemental Material. Compile before main.tex (main reads supplement.aux).
+% =====================================================================
+\documentclass[aps,pra,onecolumn,notitlepage,superscriptaddress,nofootinbib,floatfix]{revtex4-2}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage[hidelinks,pdftitle={Supplemental Material: When does tail-risk optimization change a quantum gate?},
+            pdfauthor={Sashreek Satapathy}]{hyperref}
+\usepackage{xr-hyper}
+\externaldocument[M-]{main}
+\graphicspath{{figures/}}
+
+\newtheorem{lemma}{Lemma}
+\renewcommand{\thelemma}{S\arabic{lemma}}
+\newcommand{\cvar}{\mathrm{CVaR}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Lt}{\widetilde L}
+\newcommand{\Rt}{R_{\mathrm{tail}}}
+\newcommand{\Rm}{R^{\mathrm{model}}}
+\newcommand{\umean}{u_{\mathrm{mean}}}
+\newcommand{\ucvar}{u_{\cvar}}
+\newcommand{\figorbox}[2]{\includegraphics[width=#2]{#1}}
+\newcommand{\pending}[1]{\textcolor{orange}{\textbf{[#1]}}}
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\theequation}{S\arabic{equation}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+\makeatletter\renewcommand{\p@subsection}{\thesection.}\makeatother
+
+\begin{document}
+\title{Supplemental Material for\\ ``When does tail-risk optimization change a quantum gate?
+An equivalence boundary for mean and CVaR control''}
+\author{Sashreek Satapathy}
+\date{\today}
+\maketitle
+
+Equations, figures, tables and sections of the main text are cited without
+the prefix S (e.g.\ Eq.~(\ref{M-eq:ru}), Theorem~\ref{M-thm:main}); those of
+this Supplement carry it. In the code and data files, experiments E1--E6 are
+called Stage~0, E7--E8 Stage~1 and E9 Stage~2.
+
+\tableofcontents
+% =====================================================================
+\section{Proofs}
+\label{sec:proofs}
+
+Throughout, $Z,Z_1,Z_2$ denote independent standard normal variables,
+$\varphi$ and $\Phi$ the standard normal density and distribution function,
+and $h(\phi)=\sin^2(\phi/2)$. We use four standard properties of
+$\cvar_\alpha$, all immediate from the Rockafellar--Uryasev form
+(\ref{M-eq:ru}): \emph{monotonicity} ($X\le Y$ almost surely implies
+$\cvar_\alpha X\le\cvar_\alpha Y$), \emph{translation invariance}
+($\cvar_\alpha(X+c)=\cvar_\alpha X+c$), \emph{positive homogeneity}
+($\cvar_\alpha(sX)=s\,\cvar_\alpha X$ for $s\ge0$) and \emph{subadditivity}
+($\cvar_\alpha(X+Y)\le\cvar_\alpha X+\cvar_\alpha Y$)
+\cite{Rockafellar2000,Acerbi2002}. Subadditivity follows by choosing
+$\tau=\tau_X+\tau_Y$ in (\ref{M-eq:ru}) and using
+$(x+y-\tau_X-\tau_Y)_+\le(x-\tau_X)_++(y-\tau_Y)_+$. CVaR is also
+\emph{law invariant}: it depends on $X$ only through its distribution.
+
+\subsection{The equivalence theorem}
+
+\paragraph*{Periodicity.} The infidelity $h$ is strictly increasing in $|\phi|$ on $[0,\pi]$, strictly decreasing on $[\pi,2\pi]$ and $2\pi$-periodic: $h'(\phi)=\tfrac12\sin\phi$, positive on
+$(0,\pi)$ and negative on $(\pi,2\pi)$; $h$ is even and $2\pi$-periodic.
+\qed
+
+\paragraph*{Mean infidelity.} $h(\phi)=\tfrac12(1-\cos\phi)$ and, for
+$\phi\sim\mathcal N(0,\sigma^2)$, $\E\cos\phi=\mathrm{Re}\,\E e^{i\phi}=e^{-\sigma^2/2}$
+(the characteristic function of a Gaussian). Hence
+$\E h(\phi)=\tfrac12(1-e^{-\sigma^2/2})$, whose derivative in $\sigma^2$ is
+$\tfrac14e^{-\sigma^2/2}>0$. \qed
+
+\paragraph*{Majorant.} $\Lt\ge h$ everywhere, with equality for $|\phi|\le\pi$, and $\Lt$ is non-decreasing in $|\phi|$. For $|\phi|\le\pi$, $\Lt=h$. For
+$|\phi|>\pi$, $\Lt=1\ge h$. Monotonicity: on $[0,\pi]$, $\Lt=h$ increases
+from 0 to 1 (periodicity, above); on $(\pi,\infty)$ it is constant at
+its maximum value 1. \qed
+
+\paragraph*{Sandwich bound, Eq.~(\ref{M-eq:sandwich}).} Let $E=\{|\phi|>\pi\}$ and $p=\Pr(E)$.
+\emph{Upper bound}: $L\le\Lt$ pointwise , so
+$\cvar_\alpha L\le\cvar_\alpha\Lt$ by monotonicity. \emph{Lower bound}:
+pointwise, $\Lt\le L+\mathbf 1_E$, since on $E^c$ the two sides are equal
+up to the nonnegative indicator, and on $E$ the left side is 1 while the right
+side is at least 1. Monotonicity and subadditivity give
+$\cvar_\alpha\Lt\le\cvar_\alpha L+\cvar_\alpha\mathbf 1_E$. For the Bernoulli
+variable $\mathbf 1_E$, Eq.~(\ref{M-eq:ru}) gives
+\[
+\cvar_\alpha\mathbf 1_E=\min_\tau\Big\{\tau+\tfrac1\alpha\big[p(1-\tau)_++(1-p)(-\tau)_+\big]\Big\}
+=\min\!\Big(1,\frac p\alpha\Big)\le\frac p\alpha ,
+\]
+where the minimum is attained at $\tau=0$ if $p\le\alpha$ and at $\tau=1$
+otherwise (the objective is piecewise linear in $\tau$ with kinks at 0 and 1).
+Rearranging,
+$\cvar_\alpha L\ge\cvar_\alpha\Lt-p/\alpha$. No condition on $p$ versus
+$\alpha$ is needed, because the bound $\min(1,p/\alpha)\le p/\alpha$ holds
+always. \qed
+
+\paragraph*{Theorem~\ref{M-thm:main}.} Write $\phi_i=\sigma_{f_i}Z$ (same $Z$;
+allowed because CVaR is law invariant). By the lower half of
+the sandwich bound for $f_2$ and the upper half for $f_1$,
+\[
+\cvar_\alpha L(\phi_2)-\cvar_\alpha L(\phi_1)\ge
+\big[\cvar_\alpha\Lt(\phi_2)-r_\alpha(\sigma_{f_2})\big]-\cvar_\alpha\Lt(\phi_1)
+=\Delta_{\mathrm{mono}}-r_\alpha(\sigma_{f_2}).
+\]
+$\Delta_{\mathrm{mono}}\ge0$: since $\sigma_{f_2}>\sigma_{f_1}$,
+$|\phi_2|\ge|\phi_1|$ for every realization of $Z$, and $\Lt$ is
+non-decreasing in $|\phi|$, so $\Lt(\phi_2)\ge\Lt(\phi_1)$ pointwise; apply
+monotonicity. For the residual, $\Pr(|\phi|>\pi)=2\Pr(Z>\pi/\sigma)$ and the
+Mills-ratio bound $\Pr(Z>x)\le\varphi(x)/x$ for $x>0$ (which follows from
+$\int_x^\infty\varphi(t)\,dt\le\int_x^\infty\tfrac tx\varphi(t)\,dt=\varphi(x)/x$)
+gives
+\[
+r_\alpha(\sigma)=\frac{2\Pr(Z>\pi/\sigma)}{\alpha}\le\frac{2}{\alpha}\,\frac{\sigma}{\pi}\,\frac{e^{-\pi^2/(2\sigma^2)}}{\sqrt{2\pi}}
+=\frac1\alpha\sqrt{\frac2\pi}\,\frac\sigma\pi\,e^{-\pi^2/(2\sigma^2)} .\qquad\qed
+\]
+
+\paragraph*{When is $\Delta_{\mathrm{mono}}>0$ strictly?} If $\sigma_{f_1}<\sigma_{f_2}$ and
+$\Pr(|\phi_2|<\pi)>0$ (always true for a Gaussian), then
+$\Lt(\phi_2)>\Lt(\phi_1)$ on the event $\{0<|\phi_2|<\pi\}$, which has
+positive probability and includes part of the upper $\alpha$ tail of
+$\Lt(\phi_2)$ whenever $\Pr(|\phi_2|>\pi)<\alpha$. The CVaR difference is then
+strictly positive. In the small-noise regime it equals
+$c_\alpha(\sigma_{f_2}^2-\sigma_{f_1}^2)+O(\sigma^4)$ by
+Proposition~\ref{M-prop:ratio}.
+
+\paragraph*{Optimizer equivalence.} \emph{Claim:} let $u^\star$ minimize $\E L(\phi[u])$. If $\Delta_{\mathrm{mono}}(\sigma_{u^\star},\sigma_u)>r_\alpha(\sigma_u)$ for every control with $\sigma_u>\sigma_{u^\star}$, then $u^\star$ is a global CVaR minimizer, and every CVaR minimizer has the same loss distribution. \emph{Proof:} By the mean formula, $\E L(\phi[u])$ is a
+strictly increasing function of $\sigma_u$, so $u^\star$ minimizes $\sigma_u$.
+Take any control $u$. If $\sigma_u>\sigma_{u^\star}$, Theorem~\ref{M-thm:main}
+and the hypothesis give
+$\cvar_\alpha L(u)-\cvar_\alpha L(u^\star)\ge\Delta_{\mathrm{mono}}-r_\alpha>0$.
+If $\sigma_u=\sigma_{u^\star}$, the two losses have the same distribution and
+the same CVaR. Hence $u^\star$ is a global CVaR minimizer, and every CVaR
+minimizer has $\sigma_u=\sigma_{u^\star}$. \qed
+
+\paragraph*{Size of the residual.} At $\sigma^2=0.05$,
+$\pi/\sigma=14.05$ and $\pi^2/(2\sigma^2)=98.7$, so
+$2\Pr(Z>14.05)\approx7.7\times10^{-45}$ and
+$r_{0.05}\approx1.5\times10^{-43}$.
+
+\paragraph*{Proposition~\ref{M-prop:ratio}.} $h(\phi)=\phi^2/4-\phi^4/48+\dots$,
+so $|h(\sigma Z)-\sigma^2Z^2/4|\le\sigma^4Z^4/48$. CVaR is 1-Lipschitz in the
+sense $|\cvar_\alpha X-\cvar_\alpha Y|\le\cvar_\alpha|X-Y|$ (monotonicity plus
+subadditivity), and $\cvar_\alpha(Z^4)<\infty$, so
+$\cvar_\alpha h(\sigma Z)=\tfrac{\sigma^2}{4}\cvar_\alpha(Z^2)+O(\sigma^4)$. The
+upper $\alpha$ tail of $Z^2$ is the event $\{|Z|>z_\alpha\}$,
+$z_\alpha=\Phi^{-1}(1-\alpha/2)$, of probability exactly $\alpha$, so
+\[
+\cvar_\alpha(Z^2)=\frac1\alpha\,2\!\int_{z_\alpha}^\infty t^2\varphi(t)\,dt
+=\frac2\alpha\Big[z_\alpha\varphi(z_\alpha)+\big(1-\Phi(z_\alpha)\big)\Big]
+=1+\frac{2z_\alpha\varphi(z_\alpha)}{\alpha},
+\]
+since $-t\varphi(t)+\Phi(t)$ is an antiderivative of $t^2\varphi(t)$
+(integrate by parts with $\varphi'=-t\varphi$).
+Numerically, for $\alpha=0.20,0.10,0.05,0.025,0.01$:
+$z_\alpha=1.282,1.645,1.960,2.241,2.576$ and
+$\cvar_\alpha(Z^2)=3.25,4.39,5.58,6.80,8.45$. The mean has $\E Z^2=1$, hence
+the ratios. \qed
+
+\paragraph*{Average gate fidelity.} For a unitary error $U_{\mathrm{err}}$
+on a $d$-level system, $F_{\mathrm{avg}}=(dF_e+1)/(d+1)$ with entanglement
+fidelity $F_e=|\mathrm{Tr}\,U_{\mathrm{err}}/d|^2$ \cite{Nielsen2002}. For
+$U_{\mathrm{err}}=e^{-i\phi Z/2}$ and $d=2$, $F_e=\cos^2(\phi/2)$, so
+$1-F_{\mathrm{avg}}=\tfrac23(1-\cos^2(\phi/2))=\tfrac23h(\phi)$. Taking
+expectations with the mean formula gives
+$\tfrac13(1-e^{-\sigma_f^2/2})$. Since $\tfrac23h$ is a positive multiple of
+$h$, every step of Theorem~\ref{M-thm:main} goes through unchanged. \qed
+
+\label{sec:proofs-ext}\paragraph*{Temporal correlation.} \emph{Claim:} for any stationary Gaussian noise, e.g.\ Ornstein--Uhlenbeck noise $C(t,t')=\sigma^2e^{-|t-t'|/\tau_c}$, $\phi[u]$ is exactly Gaussian and Theorem~\ref{M-thm:main} applies verbatim. \emph{Proof:} $\phi[f]=\int f\eta\,dt$ is a
+continuous linear functional of a Gaussian process, hence Gaussian, with
+variance $\int\!\!\int f(t)C(t,t')f(t')\,dt\,dt'$. For $f\equiv1$ and
+$C=\sigma^2e^{-|t-t'|/\tau_c}$,
+\[
+\sigma_f^2=\sigma^2\!\int_0^{T_g}\!\!\int_0^{T_g}e^{-|t-t'|/\tau_c}dt\,dt'
+=2\sigma^2\!\int_0^{T_g}(T_g-s)e^{-s/\tau_c}ds
+=2\sigma^2\tau_c\big(T_g-\tau_c(1-e^{-T_g/\tau_c})\big).
+\]
+As $\tau_c\to\infty$ this tends to $\sigma^2T_g^2$, the quasi-static limit
+$\sigma_\phi^2$ used in this paper. \qed
+
+\paragraph*{Several channels on one axis.} If $\boldsymbol\eta(t)$ is a jointly
+Gaussian vector process and $\phi=\sum_j\int f_j\eta_j\,dt$, then $\phi$ is a
+linear functional of a Gaussian process, hence Gaussian, with variance
+\[Q(f)=\sum_{jk}\int\!\!\int f_j(t)C_{jk}(t,t')f_k(t')\,dt\,dt' .\qquad\qed\]
+
+\paragraph*{Corollary~\ref{M-cor:general}.} Let $\tau(u_1)\le\tau(u_2)$ and
+$L_{u_i}=h(\tau(u_i)Z)$ with $h$ non-decreasing in $|\cdot|$. Then
+$L_{u_1}\le L_{u_2}$ pointwise on a common probability space, which is
+equivalent to $L_{u_1}\le_{\mathrm{st}}L_{u_2}$ \cite{Shaked2007}. Any
+risk measure that is monotone and law invariant therefore satisfies
+$\varrho(L_{u_1})\le\varrho(L_{u_2})$, so all such measures are minimized by
+the controls with the smallest $\tau(u)$. \qed
+
+\subsection{Two non-parallel channels}
+\label{sec:proofs-twoaxis}
+
+\paragraph*{Reduction to two weights.} To leading order the error of a draw is
+$\boldsymbol\epsilon=\delta\,\mathbf b+\gamma\,\mathbf a$ and the loss is
+$\boldsymbol\epsilon^{\mathsf T}W\boldsymbol\epsilon=\mathbf x^{\mathsf T}M\mathbf x$
+with $\mathbf x=(\delta/\sigma_\delta,\gamma/\sigma_\gamma)$ and
+$M=G^{\mathsf T}WG$, $G=(\sigma_\delta\mathbf b,\sigma_\gamma\mathbf a)$. With
+$\mathbf x=C^{1/2}\mathbf y$, $\mathbf y$ standard normal and $C$ the
+correlation matrix, $L=\mathbf y^{\mathsf T}C^{1/2}MC^{1/2}\mathbf y$.
+Diagonalizing the symmetric positive semidefinite matrix $C^{1/2}MC^{1/2}$ by
+an orthogonal matrix (which maps $\mathbf y$ to another standard normal
+vector) gives $L=\lambda_1Z_1^2+\lambda_2Z_2^2$.
+
+\paragraph*{Proposition~\ref{M-prop:twoaxis}(ii), Schur-convexity.} Fix $\tau$
+and write $f_\tau(\lambda)=\tau+\alpha^{-1}\E(\lambda_1X_1+\lambda_2X_2-\tau)_+$
+with $X_i=Z_i^2$. For each outcome, $\lambda\mapsto(\lambda\cdot X-\tau)_+$ is
+convex (a convex function of an affine function), and expectation preserves
+convexity. Since $X_1,X_2$ are i.i.d., $f_\tau(\lambda_1,\lambda_2)=f_\tau(\lambda_2,\lambda_1)$.
+A symmetric convex function is Schur-convex \cite[Ch.~3]{Marshall2011}: if
+$\lambda$ majorizes $\mu$ (same sum, $\mu$ more equal), then $\mu$ is a convex
+combination of $\lambda$ and its permutation, $\mu=t\lambda+(1-t)\lambda^\pi$,
+so $f_\tau(\mu)\le tf_\tau(\lambda)+(1-t)f_\tau(\lambda^\pi)=f_\tau(\lambda)$.
+This holds for every $\tau$, so taking the minimum over $\tau$ on both sides
+gives $\cvar_\alpha(L_\mu)\le\cvar_\alpha(L_\lambda)$. \qed
+
+\paragraph*{The two extreme values.} \emph{Equal split}, $\lambda=(\tfrac12,\tfrac12)$:
+$L=\tfrac12(Z_1^2+Z_2^2)$ is exponential with unit mean. By memorylessness,
+$\E[L\,|\,L>q]=q+1$, and $\Pr(L>q)=\alpha$ at $q=\ln(1/\alpha)$, so
+$\cvar_\alpha=1+\ln(1/\alpha)$, which is $4.00$ at $\alpha=0.05$.
+\emph{One axis}, $\lambda=(1,0)$: $L=Z^2$ and, from the proof of
+Proposition~\ref{M-prop:ratio},
+$\cvar_\alpha=1+2c\varphi(c)/\alpha=2[c\varphi(c)+\alpha/2]/\alpha$ with
+$c=z_\alpha$, which is $5.58$ at $\alpha=0.05$. The difference is
+$1-4.00/5.58=28\%$ of the one-axis value.
+Figure~\ref{M-fig:theory}(c) shows the full curve for four values of $\alpha$,
+computed by Monte Carlo with $6\times10^5$ draws.
+
+\paragraph*{Proposition~\ref{M-prop:twoaxis}(iii).} Suppose
+$L_u\ge_{\mathrm{st}}L_v$ with $\E L_u=\E L_v$. Realize them with
+$L_u\ge L_v$ pointwise; then $L_u-L_v\ge0$ has zero mean, so $L_u=L_v$ almost
+surely, and the two laws coincide. For two weight pairs with equal sum and
+different values, $\mathrm{Var}\,L=2(\lambda_1^2+\lambda_2^2)$ differs (since
+$\mathrm{Var}\,Z^2=2$), so the laws differ and neither dominates.
+\emph{Sufficient condition.} If the sorted weights satisfy
+$\lambda_{(1)}\le\mu_{(1)}$ and $\lambda_{(2)}\le\mu_{(2)}$, then (relabelling
+the independent $Z_i$) $\lambda_{(1)}Z_1^2+\lambda_{(2)}Z_2^2\le\mu_{(1)}Z_1^2+\mu_{(2)}Z_2^2$
+pointwise, hence dominance. A family with a common ratio
+$\lambda_2/\lambda_1=r$ is $\lambda=s(1,r)$, totally ordered by $s$, so it
+satisfies the condition. \emph{Not necessary.} The pairs $(2,1)$ and
+$(1,0.9)$ have different ratios ($0.5$ and $0.9$) but are componentwise
+ordered, so $(1,0.9)$ is dominated by $(2,1)$. An earlier draft of this paper
+stated that a common ratio was also necessary; this example shows it is not.
+\qed
+
+\subsection{The effective dimension}
+\label{sec:proofs-meff}
+
+\paragraph*{Parts (i) and (ii).} Let $X\sim\chi^2_m$ and $q=\chi^2_{m,1-\alpha}$.
+The size-biasing identity for the chi-square distribution,
+\begin{equation}
+\E\big[X\,\mathbf 1\{X>q\}\big]=m\,P\big(\chi^2_{m+2}>q\big),
+\label{eq:sizebias}
+\end{equation}
+follows from $x\,f_m(x)=m\,f_{m+2}(x)$ for the densities $f_m$, which is
+immediate from $f_m(x)=x^{m/2-1}e^{-x/2}/(2^{m/2}\Gamma(m/2))$ and
+$\Gamma(m/2+1)=(m/2)\Gamma(m/2)$. Since $\E X=m$ and $X$ is continuous,
+\begin{equation}
+\frac{\cvar_\alpha(X)}{\E X}=\frac{\E[X\mathbf 1\{X>q\}]}{\alpha\,\E X}
+=\frac1\alpha P\big(\chi^2_{m+2}>q\big)=\rho_\alpha(m),
+\end{equation}
+and the ratio is invariant under the rescaling $L=(\sum_iw_i/m)X$ that turns
+equal weights into $\chi^2_m$, giving (i).
+
+For $m=1$, $q=z_\alpha^2$ with $z_\alpha=\Phi^{-1}(1-\alpha/2)$, and
+$P(\chi^2_3>z_\alpha^2)=\alpha+2z_\alpha\varphi(z_\alpha)$ by integrating the
+$\chi^2_3$ density by parts; dividing by $\alpha$ gives
+$\rho_\alpha(1)=1+2z_\alpha\varphi(z_\alpha)/\alpha=r_\alpha$, i.e.\
+Proposition~\ref{M-prop:ratio}. For $m=2$, $X/2$ is exponential with unit
+mean, $q/2=\ln(1/\alpha)$, and the memorylessness of the exponential gives
+$\E[X/2\mid X/2>\ln(1/\alpha)]=1+\ln(1/\alpha)$, i.e.\ $\rho_\alpha(2)$ is the
+equal-split value of Proposition~\ref{M-prop:twoaxis}. The two propositions of
+the main text are thus the $m=1$ and $m=2$ points of one curve.
+
+\paragraph*{Part (iii).} $\chi^2_m/m$ has mean $1$ and variance $2/m$ and
+concentrates at $1$, so its $\alpha$-tail average tends to $1$; strict
+monotonicity in $m$ follows because $\chi^2_{m}/m$ for $m'>m$ is a strict
+mean-preserving contraction of $\chi^2_{m'}/m'$ in the convex order, and
+$\cvar_\alpha$ is strictly monotone under that order for a continuous
+distribution \cite{Shaked2007}. Equation~(\ref{M-eq:rhoeff}) extends to
+non-integer $m$ by the same formula, and is smooth and decreasing there.
+
+\paragraph*{Part (iv): the participation-ratio approximation.} For unequal
+weights we replace the spectrum $\{w_i\}$ by the equal-weight spectrum with
+the same first and second moments, which has exactly $m_{\mathrm{eff}}$
+elements by Eq.~(\ref{M-eq:meff}); $L$ and its surrogate then share their mean
+and variance, and the approximation amounts to matching the first two
+cumulants of the loss. It is not exact, because the tail of a weighted
+chi-square sum is eventually governed by the largest weight alone, so the
+error must grow as $\alpha\to0$. We quantify it on $400$ random spectra of
+$2$--$10$ directions drawn in four styles (uniform weights; uniform cubed;
+log-uniform over four decades; and one dominant weight with small companions),
+each evaluated with $4\times10^5$ draws.
+
+\begin{table}[h]
+\caption{Relative error of $\rho_\alpha(m_{\mathrm{eff}})$ against the true
+ratio over $400$ random spectra. Negative means the approximation
+underestimates the ratio, i.e.\ is conservative for a tail objective.}
+\label{tab:prop5acc}
+\begin{ruledtabular}
+\begin{tabular}{lccccc}
+$\alpha$ & 0.20 & 0.10 & 0.05 & 0.025 & 0.01\\
+\hline
+median error (\%) & 0.42 & -0.80 & -1.94 & -3.01 & -4.24\\
+95th pct.\ $|$error$|$ (\%) & 1.16 & 2.28 & 5.29 & 7.78 & 10.37\\
+worst error (\%) & 1.30 & -3.07 & -6.51 & -9.53 & -12.80\\
+fraction conservative & 0.22 & 0.97 & 0.99 & 0.99 & 0.99\\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+At $\alpha=0.05$ the approximation is conservative at $99\%$ of spectra and
+within $6.5\%$ everywhere; at $\alpha=0.01$ the worst case reaches $12.8\%$.
+For the controls of Sec.~\ref{sec:stage4}, where $m_{\mathrm{eff}}\le3$ and the
+spectra are mild, the observed error is a median $2.6\%$. Part (iv) is
+therefore an empirical statement with a stated domain, not a theorem, and the
+main text marks it as such.
+
+\subsection{The rare-channel mixture}
+\label{sec:proofs-mixture}
+
+\paragraph*{Proposition~\ref{M-prop:mixture}, with the error term.} Let
+$L=L_c+\ell_j\mathbf 1_J$ with $J$ independent of $L_c$, $P(J)=p<\alpha$, and
+let $v_\gamma$ denote the $(1-\gamma)$-quantile of $L_c$. Assume
+$\ell_j>v_{\alpha-p}$, so that every point of $J$ lies above every point of
+$J^c$ that enters the tail.
+
+Write $\gamma=\alpha-p$. The worst $\alpha$ of the mass of $L$ is then exactly
+$J$ together with the worst $\gamma$ of $J^c$, and since $\cvar$ at level
+$\alpha$ is the average of the worst $\alpha$ fraction,
+\begin{equation}
+\alpha\,\cvar_\alpha(L)=p\big(\ell_j+\E[L_c\mid J]\big)
++\gamma\,\cvar_{\gamma}(L_c\mid J^c).
+\label{eq:mixexact}
+\end{equation}
+Independence gives $\E[L_c\mid J]=\E L_c$ and
+$\cvar_\gamma(L_c\mid J^c)=\cvar_\gamma(L_c)$, so with
+$\beta=p\ell_j/\E L_c$ and $\E L=(1+\beta)\E L_c$,
+\begin{equation}
+\frac{\cvar_\alpha(L)}{\E L}
+=\frac{1}{1+\beta}\left[\frac{\beta}{\alpha}+\frac{p}{\alpha}
++\frac{\alpha-p}{\alpha}\,\frac{\cvar_{\alpha-p}(L_c)}{\E L_c}\right],
+\label{eq:mixexact2}
+\end{equation}
+which is exact. Equation~(\ref{M-eq:mixture}) is Eq.~\eqref{eq:mixexact2} with
+$p/\alpha\to0$. Two corrections are dropped. The term $p/\alpha$ is the jump
+branch's share of the \emph{continuous} loss, a relative error of at most
+$(p/\alpha)/\rho_\alpha$. The second is the difference between
+$\frac{\alpha-p}{\alpha}\,\cvar_{\alpha-p}(L_c)/\E L_c$ and $\rho_\alpha$;
+since $\gamma\,\cvar_\gamma$ is the tail integral, which is Lipschitz in
+$\gamma$ with constant $v_\gamma$, that difference is at most
+$p\,v_{\alpha-p}/(\alpha\,\E L_c)$. Both are $O(p/\alpha)$ and both are
+positive, so Eq.~(\ref{M-eq:mixture}) \emph{underestimates} the ratio.
+Throughout Sec.~\ref{sec:stage5}, $p\le2.0\times10^{-3}$ at $\alpha=0.05$, so
+$p/\alpha\le0.04$ and the bound on the relative error stays below $1.5\%$ at
+every point --- consistent with the observed median of $1.2\%$ and with its
+sign.
+
+\paragraph*{Two limits and one warning.} As $\beta\to0$ the ratio returns to
+$\rho_\alpha(m_{\mathrm{eff}})$. As $\beta\to\infty$ it approaches $1/\alpha$,
+the largest ratio any loss can have when its whole tail mass sits in a single
+atom, so the mixture law interpolates between the continuous-noise prediction
+and that ceiling. The condition $p<\alpha$ matters: for $p>\alpha$ the worst
+$\alpha$ of the mass lies entirely inside $J$, the continuous part drops out
+of the tail, and the ratio saturates at $\ell_j/\E L$ instead. The evaluation
+grid of Sec.~\ref{sec:stage5} deliberately spans
+$\alpha\in\{0.5,\,0.2,\,0.05,\,0.01,\,2\times10^{-3},\,5\times10^{-4},\,
+10^{-4}\}$ so that both sides of $p\approx\alpha$ are covered.
+
+\subsection{The reduced second-order model}
+
+\paragraph*{Proposition~\ref{M-prop:reduced}.}
+\begin{proof}
+(i) $\E L$ is quadratic in $\mathbf e_0$ with Hessian $2W$ and stationary at
+$\mathbf e_0=-\E[A\mathbf z+Q(\mathbf z)]=-\E\,Q(\mathbf z)$.
+(ii) $\boldsymbol\epsilon=\|A\|\,(\hat A\mathbf z+\kappa\hat Q(\mathbf z)+\mathbf e_0/\|A\|)$;
+the factor $\|A\|^2$ cancels in the ratio defining $\Rm_\alpha$, and
+$\mathbf e_0/\|A\|$ ranges over $\mathbb R^3$ as $\mathbf e_0$ does. Scaling
+the noise by $s$ sends $A\to sA$ and $Q\to s^2Q$.
+(iii) At $\kappa=0$ the noise part $\hat A\mathbf z$ is symmetric under
+$\mathbf z\to-\mathbf z$, so $\cvar_\alpha(L(\mathbf e_0))$ is even in
+$\mathbf e_0$. It is also convex, since $L$ is convex in $\mathbf e_0$ for
+every draw and CVaR is monotone and convex. Its minimum is therefore at
+$\mathbf e_0=0$, which is also the mean optimum.
+\end{proof}
+
+Two additional remarks:
+
+\emph{(a) Why $\mathbf e_0/\|A\|$ is free.} In (ii), the minimization of
+each objective runs over all $\mathbf e_0\in\mathbb R^3$, and
+$\mathbf e_0\mapsto\mathbf e_0/\|A\|$ is a bijection of $\mathbb R^3$, so the
+optimal \emph{normalized} offset, and therefore both optimal values up to the
+common factor $\|A\|^2$, depend only on $(\kappa,\hat A,\hat Q)$.
+
+\emph{(b) What (ii) does not say.} The scaling $\kappa\mapsto s\kappa$ holds
+for a \emph{fixed} $A$ and $Q$, i.e.\ a fixed control. If the control is
+re-optimized at each noise level, $A$ and $Q$ change as well. The prediction
+(c) of the prospective test (Sec.~\ref{M-sec:mechanism}) overlooked this, and
+failed for that reason.
+
+\subsection{Remark~\ref{M-rem:precomp}: the one-dimensional pre-compensation model}
+\label{sec:proofs-precomp}
+
+Let $\boldsymbol\epsilon=\mathbf e_0+\mathbf qz^2$ and restrict the offset to
+the line $\mathbf e_0=-c\,\mathbf q$ (components of $\mathbf e_0$
+perpendicular to $\mathbf q$ only add a constant $|\mathbf e_\perp|^2_W\ge0$
+to every draw and are optimally zero for both objectives, by translation
+invariance). With the loss metric $W$, $L=w\,(z^2-c)^2$ with
+$w=\mathbf q^{\mathsf T}W\mathbf q>0$, and $w$ drops out of both argmins.
+
+\emph{Mean.} $\E(z^2-c)^2=\mathrm{Var}(z^2)+(\E z^2-c)^2=2+(1-c)^2$, minimized
+at $c=1$ with value 2.
+
+\emph{CVaR.} By Eq.~(\ref{M-eq:ru}), $\cvar_\alpha L(c)=\min_\tau g(c,\tau)$,
+and $g$ is jointly convex in $(c,\tau)$, so the optimum satisfies the
+first-order conditions. Differentiating under the expectation,
+$\partial_cg=\alpha^{-1}\E[\partial_cL\;\mathbf 1\{L>\tau\}]=-2\alpha^{-1}\E[(z^2-c)\mathbf 1\{L>\tau\}]$,
+and at the optimal $\tau$ (the VaR) the condition $\partial_cg=0$ reads
+\begin{equation}
+\E\big[z^2-c\;\big|\;\text{tail}\big]=0 :
+\label{eq:precomp-foc}
+\end{equation}
+the \emph{average signed error over the tail draws vanishes}. The mean
+condition is the same with the whole distribution in place of the tail.
+Solving numerically ($2\times10^6$ draws) gives $c=2.76$ at $\alpha=0.05$
+($\cvar=13.8$, against $24.2$ at $c=1$) and $c=1.70$ at $\alpha=0.2$. The
+structure of the solution is instructive. At the optimum the VaR equals
+almost exactly $c^2$, the loss of a draw with $z=0$, so the tail contains two
+kinds of draws: the \emph{largest} draws, with $z^2>2c$, whose error is
+under-compensated (1.9\% of all draws at $\alpha=0.05$), and the
+\emph{smallest} draws, with $z\approx0$, whose error is over-compensated (the
+remaining 3.1\%; 62\% of the tail). Condition \eqref{eq:precomp-foc} balances
+the two. The CVaR optimum is therefore the offset at which the worst
+over-compensated and the worst under-compensated draws are equally bad, which
+is why it lies much further out than the typical draw.
+
+
+\subsection{The $\kappa^2$ law}
+\label{sec:proofs-kappa2}
+
+Throughout this section the reduced model of
+Proposition~\ref{M-prop:reduced} is used in its normalized form: with
+$a=\|A\|_F$, $\hat A=A/a$ and $\hat Q=Q/(a\kappa)$,
+\[
+\bm\epsilon=a\big(\hat A\mathbf z+\kappa\hat Q(\mathbf z)+\hat{\mathbf e}_0\big),
+\qquad L=\bm\epsilon^{\mathsf T}W\bm\epsilon ,
+\]
+and the factor $a^2$ cancels in $R_\alpha$. We drop the hats and write the
+offset as $\mathbf e_0=\kappa\mathbf f$, which is the scale at which both
+optima live: the mean optimum is exactly
+$\mathbf e_0=-\kappa\,\E\,Q(\mathbf z)$.
+
+\paragraph*{Expansion of the loss.} With $L_0=\mathbf z^{\mathsf T}M\mathbf z$,
+$M=A^{\mathsf T}WA$,
+\begin{equation}
+L=L_0+\kappa\,h_{\mathbf f}(\mathbf z)+\kappa^2g_{\mathbf f}(\mathbf z),\qquad
+\begin{aligned}
+h_{\mathbf f}&=2(A\mathbf z)^{\mathsf T}W\big(Q(\mathbf z)+\mathbf f\big),\\
+g_{\mathbf f}&=\big(Q+\mathbf f\big)^{\mathsf T}W\big(Q+\mathbf f\big).
+\end{aligned}
+\label{eq:Lexp}
+\end{equation}
+$L_0$ and $g_{\mathbf f}$ are even in $\mathbf z$; $h_{\mathbf f}$ is odd,
+being a product of a linear and a quadratic form.
+
+\paragraph*{First order vanishes.} Let $\tau^\ast(\kappa)$ attain the minimum
+in Eq.~(\ref{M-eq:ru}). Since the objective
+$\tau+\alpha^{-1}\E(L-\tau)_+$ is jointly convex and differentiable in
+$\kappa$ for fixed $\tau$, the envelope theorem gives
+\begin{equation}
+\frac{d}{d\kappa}\cvar_\alpha(L)=\frac1\alpha\,\E\big[(h_{\mathbf f}+2\kappa g_{\mathbf f})\,\mathbf 1\{L>\tau^\ast\}\big].
+\label{eq:env}
+\end{equation}
+At $\kappa=0$ the tail event is $\{L_0>\tau_0\}$, which is invariant under
+$\mathbf z\to-\mathbf z$, while $h_{\mathbf f}$ is odd; the expectation
+vanishes. \emph{The $\alpha$-tail of a symmetric loss has two sides, and to
+first order a coherent offset gains on one exactly what it loses on the
+other.} This cancellation, and not any smallness of the offset itself, is why
+a threshold in $\kappa$ exists.
+
+\paragraph*{Second order.} Differentiating Eq.~\eqref{eq:env} once more at
+$\kappa=0$, using the value-at-risk sensitivity
+$d\tau^\ast/d\kappa=\E[h_{\mathbf f}\mid L_0=\tau_0]$ (valid when $L_0$ has a
+continuous positive density $\varrho$ at $\tau_0$, which holds for a
+nondegenerate Gaussian quadratic form), the level-set term contributes the
+conditional variance of $h_{\mathbf f}$ and
+\begin{equation}
+\frac{d^2}{d\kappa^2}\cvar_\alpha(L)\Big|_{0}
+=\frac2\alpha\E\big[g_{\mathbf f}\mathbf 1\{L_0>\tau_0\}\big]
++\frac{\varrho(\tau_0)}{\alpha}\mathrm{Var}\big[h_{\mathbf f}\mid L_0=\tau_0\big],
+\end{equation}
+which is Eq.~(\ref{M-eq:Jf}) after division by two. Both terms are quadratic
+in $\mathbf f$, with Hessian
+\begin{equation}
+H=2W+\frac{4\varrho(\tau_0)}{\alpha}\,\Sigma_u,\qquad
+\Sigma_u=\mathrm{Cov}\big[WA\mathbf z\mid L_0=\tau_0\big]\succeq0,
+\label{eq:Hess}
+\end{equation}
+so $J$ is strictly convex ($W\succ0$) and its minimizer is explicit,
+$\mathbf f^\star=-H^{-1}\mathbf b$ with
+$\mathbf b=2W\,\E[Q\mid L_0>\tau_0]\,\alpha/\alpha+(2\varrho/\alpha)\mathrm{Cov}[h_0,WA\mathbf z\mid L_0=\tau_0]$
+and $h_0=h_{\mathbf 0}$. Since $J$ is quadratic,
+\begin{equation}
+J(\mathbf f_{\mathrm{mean}})-\min_{\mathbf f}J
+=\tfrac12(\mathbf f_{\mathrm{mean}}-\mathbf f^\star)^{\mathsf T}H(\mathbf f_{\mathrm{mean}}-\mathbf f^\star),
+\end{equation}
+and dividing by $\cvar_\alpha(L_0)$ gives Eq.~(\ref{M-eq:kappa2}). Both optima
+are $O(\kappa)$, so the remainder is $O(\kappa^3)$.
+
+\paragraph*{One dominant direction.} Let $n=1$ and let the second-order error
+be parallel to the first-order one, $\bm\epsilon=(e_0+z+\kappa z^2)\mathbf d$.
+Then $W$ enters only through $\mathbf d^{\mathsf T}W\mathbf d>0$, which cancels
+in $R_\alpha$, and with $e_0=-\kappa c$ the loss is $L=F(z)^2$,
+$F(z)=z+\kappa(z^2-c)$. Write $s=z_\alpha$, so that
+$2\big(1-\Phi(s)\big)=\alpha$. The tail of $L$ is
+$\{z>z_+\}\cup\{z<z_-\}$ with $F(z_\pm)=\pm V$, and expanding
+$z_+=s+\kappa a_1+\kappa^2a_2$, $z_-=-s+\kappa b_1+\kappa^2b_2$,
+$V=s+\kappa v_1+\kappa^2v_2$ in Eq.~\eqref{eq:Lexp} gives
+\begin{equation*}
+a_1+s^2-c=v_1,\qquad b_1+s^2-c=-v_1,
+\end{equation*}
+while the tail probability constraint
+$\big[1-\Phi(z_+)\big]+\Phi(z_-)=\alpha$ reads, to first order,
+$-a_1+b_1=0$. Hence $v_1=0$ and
+\begin{equation}
+a_1=b_1=c-s^2 :
+\label{eq:a1}
+\end{equation}
+the two ends of the tail move by the same amount and in the same direction.
+At second order the same constraint gives $b_2-a_2=-s\,a_1^2$. Collecting the
+three contributions to $\alpha\cvar_\alpha(L)$ --- the integral of $F^2\varphi$
+over the symmetric region $|z|>s$, the boundary shifts, and the curvature of
+$F^2\varphi$ at $\pm s$ --- the terms in $s^2$ cancel and
+\begin{equation}
+\alpha\,\cvar_\alpha(L)=\underbrace{\E\big[z^2\mathbf 1_{|z|>s}\big]}_{=\;2s\varphi(s)+\alpha\;=\;\alpha r_\alpha}
++\kappa^2\Big[m_2(c)+2s\varphi(s)\,(c-s^2)^2\Big]+O(\kappa^3),
+\label{eq:scalar}
+\end{equation}
+with $m_2(c)=\E[(z^2-c)^2\mathbf 1_{|z|>s}]$. The bracket is a quadratic in
+$c$ with leading coefficient $\alpha+2s\varphi(s)=\alpha r_\alpha$ and
+stationary point
+\begin{equation*}
+c^\star=\frac{\E[z^2\mathbf 1_{|z|>s}]+2s^3\varphi(s)}{\alpha+2s\varphi(s)}
+=1+s^2\Big(1-\frac1{r_\alpha}\Big),
+\end{equation*}
+using $2s\varphi(s)=\alpha(r_\alpha-1)$. Therefore
+$\cvar_\alpha(L)=r_\alpha\big[1+\kappa^2(c-c^\star)^2\big]+\text{const}+O(\kappa^3)$,
+and since the mean-optimal offset is $c=1$,
+\begin{equation}
+R_\alpha(\kappa)=\frac{\cvar_\alpha(L)|_{c=1}-\cvar_\alpha(L)|_{c=c^\star}}{\cvar_\alpha(L)|_{c=1}}
+=(c^\star-1)^2\kappa^2+O(\kappa^3),
+\end{equation}
+the factor $r_\alpha$ cancelling. This is Eq.~(\ref{M-eq:cstar}).
+
+\paragraph*{The two limits of the offset.} $c^\star_\alpha\to1+z_\alpha^2(1-1/r_\alpha)$
+as $\kappa\to0$ and $c\to2.76$ ($\alpha=0.05$) or $1.70$ ($\alpha=0.2$) as
+$\kappa\to\infty$ (Remark~\ref{M-rem:precomp}), so the optimal
+pre-compensation \emph{decreases} with $\kappa$: $4.15\to2.76$ at
+$\alpha=0.05$. Direct minimization of the scalar model reproduces this,
+$c^\star=4.20,\,4.17,\,3.82,\,3.16,\,2.86$ at
+$\kappa=0.02,\,0.1,\,0.5,\,1.2,\,2.2$.
+
+\paragraph*{Numerical verification.} \texttt{make\_kappa\_bound.py}
+(Sec.~\ref{sec:repro}) checks every step without the simulator: (i) in the scalar
+model the measured $R_\alpha/\kappa^2$ is $9.69$ and $1.29$ at $\kappa=0.05$
+against the predicted $9.94$ and $1.29$ for $\alpha=0.05$ and $0.2$, and the
+measured $c^\star$ is $4.14$ and $2.14$ against $4.15$ and $2.14$;
+(ii) for random three-dimensional geometries the quadratic form
+$J(\mathbf f)$ of Eq.~(\ref{M-eq:Jf}) agrees with direct Monte Carlo
+evaluation of $[\cvar_\alpha(\kappa,\mathbf f)-\cvar_\alpha(0)]/\kappa^2$ to
+about $1\%$ at $\kappa=0.02$--$0.04$; (iii) applied to the fitted $A$ and $Q$
+of every diagnosed mean control, the closed form reproduces the numerically
+optimized reduced model with median ratio $1.07$ (interquartile range
+$0.94$--$1.12$) over the 30 controls with $\kappa<0.25$
+[Fig.~\ref{M-fig:kappabound}(b)].
+
+% =====================================================================
+\section{Model, simulators and optimization}
+\label{sec:modeldetails}
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}llp{0.42\textwidth}@{}}
+\toprule
+Quantity & Value & Note\\
+\midrule
+transmon levels $N$ & 4 (or 2) & 2 levels: leakage ablation\\
+anharmonicity $\alpha_{\mathrm{anh}}/2\pi$ & $-200$~MHz & typical fixed-frequency transmon \cite{Koch2007,Krantz2019}\\
+qubit frequency & 5~GHz & enters only the thermal population\\
+temperature & 50~mK & thermal occupation $n_{\mathrm{th}}\approx0.0083$\\
+$T_1$, $T_2^*$ & $45.5~\mu$s, $16.8~\mu$s & $\gamma_\varphi=1/T_2^*-1/(2T_1)$\\
+target gate & $X_{\pi/2}=(I-iX)/\sqrt2$ & on the computational subspace\\
+gate time $T_g$ & 6.3--32.5~ns & baseline 12.7~ns (leakage onset)\\
+time step & 0.25~ns, $N_t\ge40$ & piecewise-constant propagation\\
+basis modes & $\min(40,\lfloor N_t/3\rfloor)$ per quadrature & 17 modes per quadrature at 12.7~ns ($N_t=51$)\\
+amplitude bound $A$ & $2.5\,\pi/T_g$ & $2.5\times$ peak of a Hann pulse of equal area\\
+filter & Butterworth, order 4, 300~MHz & zero-phase (forward--backward)\\
+leakage weight $\lambda$ & 7 & in $L=1-\bar F+\lambda P_{\mathrm{leak}}$\\
+detuning noise $\sigma_\delta/2\pi$ & 2.5~MHz (0.5--25~MHz in sweeps) & quasi-static\\
+amplitude noise $\sigma_\gamma$ & 2\% (1--12.7\% in Stage 1) & quasi-static\\
+correlation $\rho$ & 0 ($-0.99$ to $0.99$ in Stage 1) & between $\delta$ and $\gamma$\\
+\bottomrule
+\end{tabular}
+\caption{Model and simulation parameters.}
+\label{tab:params}
+\end{table}
+
+\paragraph*{Hamiltonian and dissipation.} The Hamiltonian is Eq.~(\ref{M-eq:H}),
+with parameters in Table~\ref{tab:params}. With $N=4$ the model contains
+the two leakage levels a fast pulse can reach; the two-level model is the
+same code with the matrices truncated, so that leakage is impossible by
+construction. Dissipation enters through
+\begin{equation}
+\dot\varrho=-i[H,\varrho]+\sum_k\Big(C_k\varrho C_k^\dagger-\tfrac12\{C_k^\dagger C_k,\varrho\}\Big),
+\qquad C_1=\sqrt{\gamma_1}\,a,\;\; C_2=\sqrt{2\gamma_\varphi}\,a^\dagger a,
+\label{eq:lindblad}
+\end{equation}
+with $\gamma_1=1/T_1$ and $\gamma_\varphi=1/T_2^*-1/(2T_1)$. A 12.7~ns gate
+loses $10^{-4}$--$10^{-3}$ of fidelity to these processes, almost
+independently of the control and identically for every quasi-static draw.
+On the qubit, $\delta$ adds $\tfrac\delta2Z$ (a rotation about $z$) and
+$\gamma$ scales the drive (a rotation about the drive axis), so the two noise
+sources rotate the qubit about different axes.
+
+\paragraph*{Pulse parameterization.} Each quadrature is a sum of Hann-windowed
+sine modes chosen so that the pulse starts and ends at zero:
+\begin{equation}
+\tilde u_I(t)=\sum_{n=1}^{M}c^{I}_n\,\sin\!\frac{(2n-1)\pi t}{T_g}\,h(t),\qquad
+\tilde u_Q(t)=\sum_{n=1}^{M}c^{Q}_n\,\sin\!\frac{2n\pi t}{T_g}\,h(t),
+\label{eq:basis}
+\end{equation}
+with the Hann window $h(t)=\tfrac12(1-\cos 2\pi t/T_g)$. The in-phase modes
+are symmetric about $T_g/2$ and the quadrature modes antisymmetric, the
+natural symmetry of a DRAG-type correction \cite{Motzoi2009}, although the
+optimizer is free to combine them arbitrarily. The raw envelope is bounded
+smoothly,
+\begin{equation}
+u=A\tanh(\tilde u/A),
+\label{eq:tanh}
+\end{equation}
+which keeps the pulse inside the amplitude budget $\pm A$ with an exact chain
+rule. An earlier version clipped the pulse and back-propagated as if it had
+not (pitfall~4 in Sec.~\ref{sec:pitfalls}). Because
+$A=2.5\,\pi/T_g$ scales with the gate time, the budget is equally tight at
+every $T_g$ and the only physical change along a gate-time sweep is the gate
+time itself. The optimized controls use the whole budget: at 12.7~ns the raw
+envelopes of both quadratures saturate at $\pm A/2\pi=\pm98$~MHz, and the
+filtered pulses that reach the qubit peak at about $115$~MHz because of the
+filter's overshoot (Fig.~\ref{fig:pulses}).
+
+\paragraph*{Bandwidth filter.} Real arbitrary-waveform generators and cabling
+limit the bandwidth. The bounded envelope is passed through a 4th-order
+Butterworth low-pass filter with a 300~MHz cutoff, applied forward and
+backward (zero phase, Gustafsson initial conditions). Because the filter is
+linear in the samples, we build it once as an exact $N_t\times N_t$ matrix $F$;
+the simulated pulse is $u_f=Fu$ and the gradient with respect to $u$ is
+$F^{\mathsf T}\,\partial L/\partial u_f$.
+
+\paragraph*{Loss.} For each noise draw the loss is Eq.~the loss of Sec.~\ref{M-sec:model},
+evaluated on four input states. Each input is a mixture of the ideal pure state
+and the thermal population of the leakage levels,
+$\varrho_{\mathrm{in}}=(1-p_{\mathrm{bg}})|\psi\rangle\langle\psi|+P\varrho_{\mathrm{th}}P$,
+with $P$ the projector onto levels $\ge2$ and $p_{\mathrm{bg}}=6.8\times10^{-5}$,
+so that a perfect gate still shows the thermal leakage background. The
+per-state figure of merit is
+$J_\psi=\mathrm{Re}\,\mathrm{Tr}\big[(\varrho_{\mathrm{tgt}}-\lambda P)\,\varrho_{\mathrm{out}}\big]$
+with $\varrho_{\mathrm{tgt}}=U_{\mathrm{target}}\varrho_{\mathrm{in}}U_{\mathrm{target}}^\dagger$,
+and $L=1-\tfrac14\sum_\psi J_\psi$. This is linear in the output state, which
+makes the gradient an adjoint (backward) propagation.
+
+\paragraph*{Noise ensembles.} Each draw is a pair $(\delta,\gamma)$. Three
+disjoint ensembles share one distribution: training ($K=128$, seed 11),
+validation (300, seed 22) and test (1000, seed 33). A replication seed $s$
+shifts all three seeds by $1000s$. Correlated channels are generated from
+independent normals $\delta$ and $g$ as
+\begin{equation}
+\gamma=\rho\,\sigma_\gamma\,\frac{\delta}{\sigma_\delta}+\sqrt{1-\rho^2}\,g ,
+\qquad g\sim\mathcal N(0,\sigma_\gamma^2),
+\label{eq:corr}
+\end{equation}
+which gives $\mathrm{corr}(\delta,\gamma)=\rho$ with unchanged marginals and
+reproduces the uncorrelated draws exactly at $\rho=0$, so every Stage-0 point
+remains valid. Using one distribution for all three ensembles matters: an
+earlier version trained on wider noise than it tested on, which by itself
+made CVaR controls look worse (pitfall~2).
+
+
+\subsection{Two simulators}
+\label{sec:simulators}
+\paragraph*{Full Lindblad model.} The reference simulator propagates the
+density matrix under Eq.~\eqref{eq:lindblad} with piecewise-constant
+controls. On each time step the Liouvillian $\mathcal L_k$ (a
+$N^2\times N^2$ matrix, $16\times16$ for 4 levels) is exponentiated exactly.
+The gradient with respect to the control on step $k$ needs the derivative of
+$e^{\mathcal L_k\Delta t}$ in the direction $\partial\mathcal L_k/\partial u$,
+which we obtain exactly from the block-matrix identity \cite{VanLoan1978}
+\begin{equation}
+\exp\!\begin{pmatrix}\mathcal L_k & \partial\mathcal L_k\\ 0 & \mathcal L_k\end{pmatrix}\!\Delta t
+=\begin{pmatrix}e^{\mathcal L_k\Delta t} & \int_0^{\Delta t}e^{\mathcal L_k(\Delta t-s)}\,\partial\mathcal L_k\,e^{\mathcal L_ks}\,ds\\ 0 & e^{\mathcal L_k\Delta t}\end{pmatrix}.
+\label{eq:vanloan}
+\end{equation}
+Combined with a forward pass for the state and a backward pass for the
+adjoint of $J$, this gives the exact gradient at the cost of about three
+simulations. Per-draw evaluations are distributed over worker processes, and
+draw $i$ is always returned at row $i$, which keeps the bootstrap paired
+(pitfall~3).
+
+\paragraph*{Fast closed-system model.} Optimizing with the full model costs
+minutes per run. $T_1$ and $T_2^*$ act nearly identically on every
+quasi-static draw, so to a good approximation they add a constant to each
+per-draw loss, and $\cvar_\alpha(L+c)=\cvar_\alpha(L)+c$ does not move the
+optimum. We therefore \emph{optimize} on a closed-system model in which the
+Hamiltonians of all $K$ draws and all $N_t$ time steps are diagonalized in one
+vectorized call, $H_{k,j}=V\,\mathrm{diag}(e)\,V^\dagger$, so each step
+propagator is $V\,\mathrm{diag}(e^{-ie\Delta t})V^\dagger$. The derivative of
+the propagator in direction $X$ follows from the Daleckii--Krein formula
+\cite{Higham2008}: in the eigenbasis,
+\begin{equation}
+\big[D\,e^{-iH\Delta t}[X]\big]_{mn}=G_{mn}\,(V^\dagger XV)_{mn},\qquad
+G_{mn}=\begin{cases}\dfrac{e^{-ie_m\Delta t}-e^{-ie_n\Delta t}}{e_m-e_n}, & e_m\ne e_n,\\[6pt]
+-i\Delta t\,e^{-ie_m\Delta t}, & e_m=e_n.\end{cases}
+\label{eq:dk}
+\end{equation}
+With dissipation switched off, the fast model reproduces the Lindblad code to
+$10^{-7}$ in both loss and gradient (self-test). It is fast enough to run a full multistart point in about a minute.
+
+\paragraph*{Every reported number is a full-Lindblad re-evaluation.} After
+optimization, all saved controls (mean, CVaR at each $\alpha$, reverse starts)
+are re-simulated in the full Lindblad model on the test ensemble, and all
+statistics are recomputed there. How well the two simulators agree is
+quantified in Sec.~\ref{sec:simcheck}.
+
+
+\subsection{Objectives and optimizer}
+All objectives share one code path. For a control with parameters
+$\mathbf c$, the training losses $L_k(\mathbf c)$ and their gradients are
+computed for all $K$ draws and combined with weights $w_k$:
+\begin{equation}
+\mathcal J(\mathbf c)=\sum_{k=1}^{K}w_k\,L_k(\mathbf c),\qquad
+\nabla\mathcal J=\sum_{k=1}^{K}w_k\,\nabla L_k(\mathbf c).
+\label{eq:objective}
+\end{equation}
+The mean uses $w_k=1/K$. CVaR uses the exact Rockafellar--Uryasev weights of
+Eq.~(\ref{M-eq:ru}): sort the draws by loss, give the worst
+$\lfloor\alpha K\rfloor$ weight $1/(\alpha K)$ and the next one the fractional
+remainder. At $\alpha=0.05$ and $K=128$ that is six draws at weight $0.156$ and
+one at $0.0625$. Where two draws tie at the boundary the weights are a valid
+subgradient, and ties do not occur in practice with continuous noise.
+
+\paragraph*{Optimizer.} L-BFGS-B \cite{Byrd1995} with at most 500 iterations
+(1000 in the strong search), $\mathrm{ftol}=10^{-12}$ and
+$\mathrm{gtol}=10^{-8}$, identical for every objective. The CVaR objective is
+only piecewise smooth, because the set of tail draws changes as the control
+moves; in practice L-BFGS-B handles this well, and the in-sample audit
+(below) checks that it actually decreases the training CVaR.
+
+\paragraph*{Restarts.} Each objective gets the same number of restarts, 4 by
+default (20 in the strong search). The list is: the Hann pulse of the correct
+area; random perturbations of it (independent Gaussian noise of scale $0.3A$
+on every sample, projected back onto the basis); and, along a sweep, a
+continuation from the previous point's mean control, rescaled to keep the
+rotation area. For CVaR, one restart is replaced by the warm start from
+$\umean$.
+
+
+\subsection{Extracting the error rotation vector}
+
+Given the $2\times2$ qubit block $U_q$ of a propagator, form
+$E=U_{\mathrm{target}}^\dagger U_q$. If $E$ is not unitary (leakage), replace
+it by its polar factor $E\to U\!V^\dagger$ from the singular value
+decomposition $E=U\Sigma V^\dagger$, the closest unitary in Frobenius norm.
+Divide by $\sqrt{\det E}$ to land in $SU(2)$, where
+$E=c\,I-i\,\mathbf v\cdot\boldsymbol\sigma$ with
+$c=\tfrac12\mathrm{Re}\,\mathrm{Tr}\,E$ and
+$v_j=-\tfrac12\mathrm{Im}\,\mathrm{Tr}(E\sigma_j)$. The square root leaves a
+sign ambiguity $E\leftrightarrow-E$, resolved by choosing $c\ge0$, i.e.\ a
+rotation angle $\epsilon\le\pi$. Then $\epsilon=2\,\mathrm{atan2}(|\mathbf v|,c)$
+and $\boldsymbol\epsilon=\epsilon\,\mathbf v/|\mathbf v|$.
+
+\subsection{Exact gradient of the closed-system loss}
+
+For one draw and one input, $J=\mathrm{Re}\,\mathrm{Tr}[O\,\varrho_N]$ with
+$\varrho_{k+1}=U_k\varrho_kU_k^\dagger$. Define the backward-propagated
+observable $\Lambda_{N}=O$, $\Lambda_k=U_k^\dagger\Lambda_{k+1}U_k$. A change
+$dU_k$ of one step propagator changes $J$ by
+$dJ=2\,\mathrm{Re}\,\mathrm{Tr}\big[\Lambda_{k+1}\,dU_k\,\varrho_kU_k^\dagger\big]$
+(for Hermitian $O$). With $M_k=\varrho_kU_k^\dagger\Lambda_{k+1}$ and
+$dU_k=V\big(G\circ(V^\dagger XV)\big)V^\dagger\,du$ from Eq.~(\ref{eq:dk}),
+\[
+\frac{\partial J}{\partial u_k}=2\,\mathrm{Re}\sum_{m,n}G_{mn}\,(V^\dagger XV)_{mn}\,(V^\dagger M_kV)_{nm},
+\]
+with $X=(1+\gamma)(a+a^\dagger)/2$ for $u_I$ and $(1+\gamma)\,i(a^\dagger-a)/2$
+for $u_Q$. One forward pass stores the $\varrho_k$, one backward pass builds
+the $\Lambda_k$, and the cost is independent of the number of control
+parameters. The gradient with respect to the basis coefficients follows by
+the chain rule through the filter $F$ and the bound (\ref{eq:tanh}),
+$\partial u/\partial\tilde u=1-(u/A)^2$.
+
+\subsection{The four-state loss metric}
+\label{sec:W}
+
+Let the error $E=U_{\mathrm{target}}^\dagger U=\cos(\epsilon/2)I-i\sin(\epsilon/2)\,\mathbf n\cdot\boldsymbol\sigma$
+act on an input with Bloch vector $\mathbf r$. The state fidelity is
+$F=|\langle\psi|E|\psi\rangle|^2=|\cos(\epsilon/2)-i\sin(\epsilon/2)\,\mathbf n\cdot\mathbf r|^2
+=\cos^2(\epsilon/2)+\sin^2(\epsilon/2)(\mathbf n\cdot\mathbf r)^2$, so
+\[
+1-F_{\mathbf r}=\sin^2(\epsilon/2)\big(1-(\mathbf n\cdot\mathbf r)^2\big).
+\]
+The four inputs $|0\rangle,|1\rangle,|{+}\rangle,|{+}i\rangle$ have
+$\mathbf r=\hat z,-\hat z,\hat x,\hat y$, and
+$\sum_{\mathbf r}(\mathbf n\cdot\mathbf r)^2=2n_z^2+n_x^2+n_y^2=1+n_z^2$. Hence
+\[
+1-\bar F=\tfrac14\sin^2(\epsilon/2)\,(3-n_z^2)
+\approx\tfrac1{16}\big(3\epsilon_x^2+3\epsilon_y^2+2\epsilon_z^2\big)
+=\boldsymbol\epsilon^{\mathsf T}W\boldsymbol\epsilon,\qquad W=\tfrac1{16}\mathrm{diag}(3,3,2).
+\]
+We checked this expression against the four-state loss computed by the
+closed-system simulator for the 2-level model. On the transmon the thermal
+admixture of the inputs and the leakage term add small corrections that $W$
+does not include.
+
+
+% =====================================================================
+\section{Fairness protocol, statistics and pipeline errors}
+\label{sec:fairnessall}
+\subsection{The fairness protocol}
+\label{sec:fairness}
+
+A small difference between two optimized controls is easily created by
+the optimization procedure rather than by the objectives. The protocol below
+was built up in response to specific failures (Sec.~\ref{sec:pitfalls}).
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item \emph{Equal restarts and tolerances} for every objective.
+\item \emph{Warm start.} One CVaR restart begins at the selected mean control.
+L-BFGS-B only accepts steps that decrease the objective, so this run
+\emph{cannot} end with a higher training CVaR than $\umean$. If it does, the
+code is wrong. This \emph{in-sample audit} is checked at every point.
+\item \emph{Budget parity.} The warm-started CVaR run has received the mean
+optimization plus one more run. The mean objective therefore gets one extra
+continuation run from its own optimum, kept if it improves the validation
+mean. This removes the possibility that CVaR ``wins'' only because it was
+optimized for longer.
+\item \emph{Selection on validation data only.} Each objective picks its
+winning restart by its own risk measure on the validation ensemble. The test
+ensemble is used only for the reported numbers.
+\item \emph{Reverse warm start.} For each CVaR control, the mean optimizer is
+restarted from $\ucvar$. The result is classified, at a relative tolerance
+of $10^{-3}$ in validation mean loss, as: \emph{same basin} (it walks back to
+the mean loss of $\umean$, so CVaR shifted the solution within one basin);
+\emph{different basins} (it stays at a worse mean loss); or \emph{artifact}
+(it finds a better mean control than the multistart did, so the multistart
+had missed a basin).
+\item \emph{Conservative comparator.} The reported $\Rt$ compares $\ucvar$
+with the best mean-objective control found at that point by any route
+(multistart, continuation or reverse start), chosen on validation data. The
+mean side thus receives more search than the CVaR side. A positive $\Rt$ is a
+\emph{lower bound} on the CVaR advantage. The converse does not hold: if a
+reverse start upgraded the comparator by more than $0.1\%$, a negative $\Rt$
+may just mean that the CVaR search did not get the same upgrade. Such cells
+are drawn with open markers, their same-budget value is listed in
+Sec.~\ref{sec:fulltable}, and no cell is dropped.
+\end{enumerate}
+
+
+\subsection{Evaluation and statistics}
+\label{sec:stats}
+
+The outcome metrics, on the test ensemble in the full Lindblad model, are
+the tail gap and the relative tail gain,
+\begin{equation}
+D(\alpha)=\cvar_\alpha(L[\umean])-\cvar_\alpha(L[\ucvar]),\qquad
+\Rt(\alpha)=\frac{D(\alpha)}{\cvar_\alpha(L[\umean])}.
+\label{eq:rtail}
+\end{equation}
+$\Rt>0$ means the CVaR control has the better tail; $\Rt=0.2$ means its
+worst-5\% average error is 20\% lower. Uncertainty comes from a \emph{paired}
+bootstrap \cite{Efron1993}: the 1000 test draws are resampled with
+replacement 2000 times, the \emph{same} resampled indices are used for both
+controls, and $D$ and $\Rt$ are recomputed each time; the 95\% interval is
+the 2.5--97.5 percentile range. Pairing matters because the two controls are
+evaluated on the same draws, and much of the draw-to-draw variation is
+common to both; an unpaired bootstrap would give much wider intervals. A
+point counts as a significant divergence when the interval excludes zero, and
+as within noise when it contains zero. The \emph{out-of-sample audit} for the
+warm-started CVaR control requires $D\ge0$ up to its interval.
+
+\paragraph*{Test-set resolution.} With 1000 test draws, $\cvar_{0.05}$ averages
+50 draws, which resolves differences of a few percent. $\cvar_{0.01}$
+averages 10 test draws but was optimized on $1.28$ training draws, which is why
+that level overfits (Sec.~\ref{sec:audit}). Replication across independent
+noise seeds shows that out-of-sample $\Rt$ scatters by about $\pm0.04$ at
+points where the objectives are equivalent, which sets the practical
+resolution of the study.
+
+
+\subsection{Audit and replication}
+\label{sec:audit}
+Before any physics, the pipeline must pass its own test: a CVaR optimizer
+started from $\umean$ must not end with a worse training CVaR, and should not
+end with a significantly worse test CVaR either.
+
+\begin{figure}[htbp]
+\centering
+\figorbox{figures/fig_audit.pdf}{0.5\textwidth}
+\caption{Audit (E1, E6): $\Rt$ at the leakage onset, $T_g=12.7$~ns, for five
+CVaR levels and three independent noise seeds (``fast'' is the first seed,
+from the main run), full Lindblad, CVaR control against the mean control it
+was warm-started from. The scatter between seeds ($\approx\pm0.04$) sets the
+resolution of the study. At $\alpha=0.01$ the CVaR rests on $1.3$ training
+draws and overfits.}
+\label{fig:audit}
+\end{figure}
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+$\alpha$ & 0.01 & 0.025 & 0.05 & 0.10 & 0.20\\
+\midrule
+seed 0: $\Rt$ & $-0.038$ & $-0.000$ & $-0.010$ & $+0.006$ & $-0.004$\\
+\quad 95\% CI & $[-0.147,0.062]$ & $[-0.012,0.012]$ & $[-0.031,0.008]$ & $[-0.005,0.018]$ & $[-0.016,0.009]$\\
+seed 1: $\Rt$ & $-0.137$ & $-0.041$ & $-0.034$ & $-0.038$ & $-0.010$\\
+seed 2: $\Rt$ & $+0.016$ & $+0.013$ & $+0.018$ & $+0.005$ & $-0.001$\\
+\bottomrule
+\end{tabular}
+\caption{E1 and E6, $T_g=12.7$~ns, full Lindblad, test ensemble. The
+in-sample audit passes for every seed and $\alpha$. As the audit requires,
+$\Rt$ here compares the CVaR control with the mean control it was warm-started
+from (equal budget). Out of sample, $\Rt$
+scatters across seeds by about $\pm0.04$ around zero; with seed 1 the CVaR
+control is significantly \emph{worse} at every $\alpha$.}
+\label{tab:audit}
+\end{table}
+
+All five CVaR levels pass the in-sample audit, and none fails out of sample
+(Table~\ref{tab:audit}, Fig.~\ref{fig:audit}). At $\alpha=0.01$ the CVaR averages just
+$0.01\times128\approx1.3$ training draws; its training CVaR improves while
+its test CVaR does not, which is finite-sample overfitting rather than a
+physical effect. We therefore treat $\alpha=0.01$ as below the resolution of
+$K=128$.
+
+The replication (E6) sharpens this. With three independent training, validation
+and test ensembles, $\Rt$ at the onset ranges from $-0.04$ to $+0.02$ for
+$\alpha\ge0.025$. There is no systematic CVaR advantage, and one seed shows a
+significant disadvantage. This is expected: CVaR at $\alpha=0.05$ is estimated
+from about 6 of the 128 training draws, so the CVaR control fits its training
+sample more closely than the mean control does. Where the theorem says the two
+objectives share a minimizer, CVaR can only add estimation noise.
+
+
+\subsection{Seven ways to manufacture a spurious result}
+\label{sec:pitfalls}
+
+Each of the following occurred in an earlier version of this pipeline and was
+caught by the audit. They are listed because each would have produced a
+publishable-looking but false conclusion, and because most of them are
+generic to comparisons between optimization objectives.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}p{0.03\textwidth}p{0.30\textwidth}p{0.29\textwidth}p{0.28\textwidth}@{}}
+\toprule
+& Error & Spurious effect & Cure\\
+\midrule
+1 & loss defined as $-(F-\lambda P_{\mathrm{leak}})<0$ & sign of $\Rt$ flipped; a worse control read as better & loss $\ge0$, larger is worse\\
+2 & training noise wider than test noise & CVaR pays for robustness never tested & one distribution for all ensembles\\
+3 & parallel results collected in completion order & ``paired'' bootstrap silently unpaired & draw $i$ always at row $i$\\
+4 & hard clipping with unclipped gradient & wrong gradients on up to 58\% of samples & smooth bound $A\tanh(\tilde u/A)$\\
+5 & auxiliary regularizer 1--5$\times$ the loss & $\Rt\approx0.3$ at the onset, $\approx0$ without & regularizer removed\\
+6 & mean optimizer stuck in a poor basin & any other objective looks good & reverse warm start, best-mean comparator\\
+7 & mean given extra search, CVaR not & CVaR looks arbitrarily bad ($\Rt=-3.6$) & conservative-comparator rule\\
+\bottomrule
+\end{tabular}
+\caption{Pipeline errors found and removed.}
+\label{tab:pitfalls}
+\end{table}
+
+\begin{enumerate}[leftmargin=*,itemsep=1pt]
+\item Defining the loss as $-(F-\lambda P_{\mathrm{leak}})<0$ flips the sign
+of $\Rt$, because its denominator becomes negative: a CVaR control that was
+\emph{worse} on every test draw read as ``better''.
+\item Training on wider noise (2.5~MHz, 2\%) than the test set (1~MHz, 1\%)
+makes a CVaR control pay, in nominal fidelity, for robustness against tails
+that never occur in the test set.
+\item Collecting parallel results in completion order silently unpairs a
+``paired'' bootstrap: the same index then refers to different draws for the
+two controls.
+\item Hard-clipping the pulse while back-propagating as if unclipped gives
+wrong gradients on up to 58\% of samples, since that fraction of samples sat
+on the rail.
+\item An auxiliary filter-function regularizer, sized as 2\% of the fidelity
+\emph{reward}, was $1$--$5\times$ the infidelity \emph{loss}. The optimizer
+then mostly minimized a noise model that was neither in the ensemble nor in
+the reported CVaR. It manufactured $\Rt\approx0.3$ at the leakage onset;
+without it, $\Rt\approx0$.
+\item A mean optimizer stuck in a poor basin makes \emph{any} other objective
+look good. The reverse warm start exposed 2--9\% better mean controls at
+long gate times.
+\item The converse. A mean control found with \emph{extra} search, if CVaR is
+not given the same, can make CVaR look arbitrarily bad: in one cell
+($T_g=20$~ns, $\alpha=0.2$), $\Rt=-3.6$ against a mean control found by a
+reverse start, whereas the same cell reads $+0.11$ at equal budget. Hence the
+conservative-comparator rule of Sec.~\ref{sec:fairnessall}: positive values are
+lower bounds, and negative values in upgraded cells are not interpreted.
+\end{enumerate}
+Each has the same cure: an audit that could have made the headline result
+fail. Items 6 and 7 are two sides of one problem, the asymmetry of search
+effort between objectives, and they show that neither the equal-budget nor
+the best-found comparison is safe alone. Reporting both, as
+Sec.~\ref{sec:fulltable} does, is the honest option.
+
+
+% =====================================================================
+\section{Error-geometry diagnostics}
+\label{sec:diagnostics}
+
+To understand \emph{why} two controls differ, we extract the full error
+of every test draw, not only its loss.
+
+\paragraph*{Error rotation vectors.} For each draw, the qubit block of the
+closed-system propagator is compared with the target,
+$E=U_{\mathrm{target}}^\dagger U_{2\times2}$. If leakage makes the block
+slightly non-unitary, it is replaced by its nearest unitary (the polar factor
+from a singular value decomposition). After removing the global phase,
+$E=\cos(\epsilon/2)I-i\sin(\epsilon/2)\,\mathbf n\cdot\boldsymbol\sigma$, and
+the error rotation vector $\boldsymbol\epsilon=\epsilon\mathbf n$ follows from
+the trace and the Pauli components of $E$, with the sign fixed so that
+$\epsilon\le\pi$. For a 2-level model this is exact; its four-state loss is
+$\boldsymbol\epsilon^{\mathsf T}W\boldsymbol\epsilon$ to leading order, which
+we verified against the simulator (Sec.~\ref{sec:W}).
+
+\paragraph*{Whitened noise coordinates.} The two noise variables are
+standardized, $x_1=\delta/\sigma_\delta$, $x_2=\gamma/\sigma_\gamma$, and
+rotated into independent standard normals:
+\begin{equation}
+z_\pm=\frac{x_1\pm x_2}{\sqrt{2(1\pm\rho)}} ,
+\label{eq:whiten}
+\end{equation}
+ordered so that the direction with the larger variance $1+|\rho|$ comes first
+($z_+$ for $\rho\ge0$, $z_-$ for $\rho<0$). With one active channel,
+$z=x_1$ or $x_2$. Whitening keeps the fit well conditioned at $|\rho|=0.99$,
+where $x_1$ and $x_2$ are almost collinear.
+
+\paragraph*{Expansion and $\kappa$.} Over the 1000 test draws we fit, by least
+squares, each component of $\boldsymbol\epsilon$ as a quadratic polynomial in
+$\mathbf z$:
+\begin{equation}
+\boldsymbol\epsilon(\mathbf z)\approx\mathbf e_0+\sum_iA_{\cdot i}z_i+\sum_{i\le j}Q_{\cdot ij}z_iz_j .
+\label{eq:fit}
+\end{equation}
+The coherent error is $\mathbf e_0$, the first-order response $A$ (a
+$3\times n$ matrix) and the second-order coefficients $Q$ (a $3\times
+n(n+1)/2$ array). The mechanism variable is
+$\kappa=\|Q\|_F/\|A\|_F$, computed for the mean control. For one channel
+it reduces to $|\mathbf q|/|\mathbf a|$, where $\boldsymbol\epsilon\approx\mathbf e_0+\mathbf az+\mathbf qz^2$.
+
+\paragraph*{Reduced-model prediction.} From the fitted $A$ and $Q$ of the mean
+control, $R^{\mathrm{model}}_{0.05}$ (Proposition~\ref{M-prop:reduced}) is
+computed with no free parameter: we draw $6\times10^4$ standard normal vectors
+$\mathbf z$, form the noise part $A\mathbf z+Q(\mathbf z)$, and minimize
+$\cvar_{0.05}$ of $L=(\mathbf e_0+A\mathbf z+Q(\mathbf z))^{\mathsf T}W(\cdots)$
+over $\mathbf e_0\in\mathbb R^3$ by Nelder--Mead, starting from the exact mean
+optimum $\mathbf e_0=-\E\,Q(\mathbf z)$. Then
+$R^{\mathrm{model}}=1-\cvar^{\min}/\cvar(\mathbf e_0^{\mathrm{mean}})$.
+
+\paragraph*{Offsets.} For points where one noise direction dominates, the
+coherent offset of each control is summarized as
+$c=-\mathbf e_0\cdot\mathbf q/|\mathbf q|^2$, the offset in units of the
+second-order error, to be compared with Remark~\ref{M-rem:precomp}.
+
+\paragraph*{Loss-quadratic geometry.} For Proposition~\ref{M-prop:twoaxis}, the
+per-draw loss is also fitted directly as
+$L\approx L_0+\mathbf g^{\mathsf T}\mathbf x+\mathbf x^{\mathsf T}M\mathbf x$;
+the weights $\lambda_1\ge\lambda_2$ are the eigenvalues of
+$C^{1/2}MC^{1/2}$ with $C$ the channel correlation matrix, and the loss
+anisotropy is $(\lambda_1-\lambda_2)/(\lambda_1+\lambda_2)$. This fit is
+coarser than Eq.~\eqref{eq:fit}, because the loss is quartic in the noise once
+$Q$ matters: its $R^2$ ranges from $0.55$ to $0.998$ over the diagnosed
+mean controls.
+
+
+% =====================================================================
+\section{Simulator validation}
+\label{sec:simcheck}
+\begin{figure}[htbp]
+\centering
+\figorbox{figures/fig_simcheck.pdf}{0.95\textwidth}
+\caption{How the fast optimizer model relates to the full Lindblad model, at
+all 44 points with saved error clouds. (a) The absolute tail gap $D$ agrees
+across the two models over four decades (median ratio $1.000$, interquartile
+range $0.998$--$1.022$). (b) The ratio $\Rt$ does not, at low losses: the
+Lindblad value (vertical) is predicted to within $0.005$ by the fast $D$
+divided by the fast CVaR plus the $T_1/T_2$ floor (orange; median error
+$0.0003$), while the fast $\Rt$ alone (crosses) overstates it where the
+losses fall below the floor.}
+\label{fig:simcheck}
+\end{figure}
+
+The fast model leaves out $T_1$ and $T_2^*$. To check that this does not bias
+the conclusions, we compared both models at every point for which
+closed-system error clouds were saved (44 points, Fig.~\ref{fig:simcheck}).
+Two results emerge. First, the \emph{absolute} gap $D$ is the same in both
+models: the median ratio $D_{\mathrm{Lindblad}}/D_{\mathrm{fast}}$ is $1.000$,
+with interquartile range $0.998$--$1.022$. Dissipation adds almost the same
+constant to both controls' losses and cancels in the difference, as
+translation invariance of CVaR predicts. Second, the \emph{relative} gain
+$\Rt$ is diluted, because the constant enters its denominator:
+\begin{equation}
+\Rt^{\mathrm{Lindblad}}\approx\frac{D_{\mathrm{fast}}}{\cvar_{\alpha}^{\mathrm{fast}}(L[\umean])+\ell_{\mathrm{floor}}} ,
+\label{eq:dilution}
+\end{equation}
+where $\ell_{\mathrm{floor}}$, the mean-loss difference between the two
+models for $\umean$, ranges from $1.4\times10^{-4}$ to $1.06\times10^{-3}$.
+Equation~\eqref{eq:dilution} predicts the Lindblad $\Rt$ with median absolute
+error $0.0003$ and maximum $0.005$. The fast $\Rt$ alone has median error
+$0.003$ but reaches $0.19$ at points whose losses lie well below the floor.
+All conclusions in this paper are drawn from the Lindblad values, which are
+the conservative ones; where the dilution matters (the prospective test at a
+quarter of the noise) both are reported.
+
+
+% =====================================================================
+\section{Experiments}
+\label{sec:experiments}
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}llp{0.50\textwidth}r@{}}
+\toprule
+ID & Name & What is varied & Points\\
+\midrule
+E1 & Audit & $\alpha\in\{0.01,0.025,0.05,0.1,0.2\}$ at $T_g=12.7$~ns, 4 levels & 1\\
+E2 & Leakage sweep & $T_g=6.3$--$32.5$~ns across the leakage onset; 4 and 2 levels & 9+5\\
+E3 & Channel split & detuning only vs amplitude only, $T_g=12.7$--$20.8$~ns & 3+3\\
+E4 & Phase-variance sweep & $\sigma_\delta/2\pi=0.5$--$25$~MHz at $T_g=8$, $12.7$, $20$~ns; 2 levels, detuning only & 16\\
+E5 & Strong search & 20 restarts, 1000 iterations, $T_g=15.4$, $20.8$, $32.5$~ns; 4 and 2 levels & 3+3\\
+E6 & Replication & E1 and two E4 points with two further noise seeds & 6\\
+E7 & Several channels & $\sigma_\gamma=0.01$--$0.127$ and $\rho=-0.99$ to $0.99$ at $T_g=12.7$~ns, 2 levels; replication seeds & 16\\
+E8 & Prospective test & four new points at $\rho=0.99$, predictions fixed in advance & 4\\
+E9 & Dominance test & candidate pools of 376--491 controls; E4's phase variances at 8, 12.7, 20~ns (2 levels, 3 seeds at 12.7~ns) and 12.7, 20.8~ns (4 levels) & 42\\
+\bottomrule
+\end{tabular}
+\caption{Experiments. Every point comprises one mean optimization and CVaR
+optimizations at $\alpha=0.05$ and $0.2$ (all five levels in E1), each with
+its own restarts and reverse start, all re-evaluated in the full Lindblad
+model.}
+\label{tab:experiments}
+\end{table}
+
+The experiments are listed in Table~\ref{tab:experiments}. The
+\emph{leakage onset} used to place the E2 sweep is the gate time at which the
+nominal leakage of a Hann pulse exceeds $5\times$ the thermal background,
+found by log--log interpolation on 30 gate times between 3 and 120~ns
+(Fig.~\ref{fig:leak}). E4 matches $\sigma_\phi^2=(\sigma_\delta T_g)^2$ across
+the three gate times, so that the \emph{collapse test} can check whether
+$\sigma_\phi$ alone controls the result. E7 runs at a detuning noise that
+gives $\sigma_\phi^2=0.04$, inside the single-channel equivalence region, so
+that any divergence must come from the second channel or from the
+correlation. At $\sigma_\gamma=0.127$ the amplitude channel has the same phase
+variance as the detuning channel. E8 is described in Sec.~\ref{M-sec:mechanism} and E9 in Sec.~\ref{M-sec:dominance}.
+
+\paragraph*{Computation.} All simulations were run on a personal laptop
+(10 CPU cores, 8 worker processes, Python with NumPy and SciPy). A
+two-level Stage-1 point (one mean and two CVaR multistarts with reverse
+starts) takes 70--90~s with the fast model, and a full-Lindblad re-evaluation of
+one point about 14~s.
+
+% =====================================================================
+\section{Additional results}
+\label{sec:addresults}
+\subsection{Leakage onset}
+\label{sec:leakonset}
+\begin{figure}[htbp]
+\centering
+\figorbox{figures/leak_vs_Tg.pdf}{0.48\textwidth}
+\caption{Nominal leakage of a Hann pulse versus gate time. The onset
+($5\times$ the thermal background of $6.8\times10^{-5}$) is at
+$T_g^{\mathrm{on}}=12.7$~ns, and at $11.6$ or $13.4$~ns for $10\times$ or
+$3\times$, so the onset does not hinge on the threshold chosen.}
+\label{fig:leak}
+\end{figure}
+
+Leakage of a Hann pulse falls from 12\% at 3~ns to the thermal floor by
+$\sim$20~ns (Fig.~\ref{fig:leak}). The onset, $T_g^{\mathrm{on}}=12.7$~ns,
+defines the leakage-dominated region $T_g<T_g^{\mathrm{on}}$.
+
+
+\subsection{Gate-time sweep and strong search}
+\label{sec:sweep}
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3.2pt}
+\begin{tabular}{@{}lccccccccc@{}}
+\toprule
+$T_g$ (ns) & 6.3 & 7.4 & 8.5 & 9.9 & 11.5 & 12.7 & 15.4 & 20.8 & 32.5\\
+Hann leakage & $3\!\times\!10^{-2}$ & $2\!\times\!10^{-2}$ & $8\!\times\!10^{-3}$ & $3\!\times\!10^{-3}$ & $1\!\times\!10^{-3}$ & $5\!\times\!10^{-4}$ & $2\!\times\!10^{-4}$ & $7\!\times\!10^{-5}$ & $7\!\times\!10^{-5}$\\
+\midrule
+$\Rt$, 4 levels & $-0.003$ & $-0.011$ & $-0.016$ & $-0.017$ & $-0.021$ & $-0.022$ & $+0.104$ & $+0.102$ & $+0.064$\\
+$\Rt$, 2 levels & $-0.026$ & -- & -- & -- & -- & $-0.026$ & $-0.012$ & $-0.007^{\dagger}$ & $+0.009$\\
+\midrule
+strong search, 4 lev. & & & & & & & $+0.100$ & $+0.117^{*}$ & $+0.059$\\
+strong search, 2 lev. & & & & & & & $-0.008^{*}$ & $-0.021$ & $-0.004$\\
+\bottomrule
+\end{tabular}
+\caption{E2 and E5, $\alpha=0.05$, full Lindblad, CVaR control against the
+best mean control. Below and at the onset, $|\Rt|\le0.026$ in every case.
+Strong search: 20 restarts per objective and 1000 iterations. $^{*}$A
+reverse start improved the mean control by more than 0.1\%, and the value
+shown is against that improved control (two-level 15.4~ns: $+0.076$ at equal
+budget). 95\% CIs of the strong search:
+$[0.077,0.122]$, $[0.092,0.138]$, $[0.036,0.080]$. $^{\dagger}$Against the
+multistart mean control alone this cell reads $+0.098$; a reverse start found
+a mean control that matches the CVaR control's tail, so the apparent
+divergence was a missed basin (pitfall~6, Sec.~\ref{sec:pitfalls}).}
+\label{tab:sweep}
+\end{table}
+
+
+Throughout the leakage-dominated region, $6.3\le T_g\le12.7$~ns, the mean and
+CVaR controls coincide within $|\Rt|\le0.026$, with 4 levels and with 2
+(Table~\ref{tab:sweep}). Where $\Rt$ differs from zero at all it is slightly
+negative, the same estimation-variance penalty seen in the audit. The CVaR optimizer started from $\umean$ moves
+the pulse by only 1--2\% and gains under 1\% in-sample. This is not because
+leakage is absent from the problem: a Hann pulse at 6.3~ns leaks 3\%. Both
+optimizers suppress leakage to near the thermal floor
+($\approx7$--$9\times10^{-5}$), and the residual loss distributions remain
+ordered, exactly as Corollary~\ref{M-cor:general} requires.
+
+
+\subsection{Channel split}
+\label{sec:channelsplit}
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+$T_g$ (ns) & 12.7 & 15.4 & 20.8\\
+\midrule
+both channels & $-0.022$ & $+0.104$ & $+0.102$\\
+amplitude only & $-0.013$ & $-0.166^{\ddagger}$ & $-0.001$\\
+detuning only & $-0.015$ & $+0.074$ & $+0.177$\\
+\bottomrule
+\end{tabular}
+\caption{E3, 4 levels, $\alpha=0.05$, full Lindblad, against the best mean
+control. Amplitude noise alone never produces a positive divergence.
+$^{\ddagger}$Comparator asymmetry: the best mean control here came from a
+reverse start off the $\alpha=0.2$ CVaR control, a basin the $\alpha=0.05$
+CVaR search never visited; at equal budget the cell reads $-0.007$.}
+\label{tab:channel}
+\end{table}
+
+Amplitude noise alone gives no CVaR advantage at any gate time
+(Table~\ref{tab:channel}); its one large negative cell is a comparator
+artefact, not a physical effect. This rules out an alternative mechanism in which
+the level-2 AC Stark shift converts amplitude error into a quadratic phase.
+Any divergence requires detuning noise.
+
+The strong search (E5) settles whether the long-gate divergence is real.
+With 20 restarts and 1000 iterations per objective, and CVaR compared against
+the best mean control found anywhere, the divergence persists: $\Rt=0.100$, $0.117$ and $0.059$ at
+15.4, 20.8 and 32.5~ns (Table~\ref{tab:sweep}). At 15.4 and 32.5~ns the
+reverse start returns to $\umean$, so the CVaR solution is a genuine shift
+within the same basin.
+
+\paragraph{The transmon diverges earlier than the qubit.} A two-level qubit
+with exactly the same noise shows no divergence at any gate time up to
+32.5~ns. With the same 20-restart, 1000-iteration search as the transmon,
+$\Rt=-0.008$, $-0.021$ and $-0.004$ at 15.4, 20.8 and 32.5~ns
+($\sigma_\phi^2=0.06$, $0.11$, $0.26$), where the transmon gives $0.10$,
+$0.12$ and $0.06$. The 4-restart runs agree ($-0.012$, $-0.007$, $+0.009$).
+At 15.4~ns the qubit shows once more how an apparent divergence arises: at
+equal budget $\Rt=+0.076$, but a reverse start finds a mean control with the
+same tail. In absolute terms, at 20.8~ns the transmon's
+tail gap is $D=1.2\times10^{-3}$, against $-4\times10^{-5}$ for the qubit. The
+higher transmon levels therefore lower the divergence threshold and amplify
+it once detuning noise is present, while by themselves (amplitude noise only)
+they produce none.
+
+
+\subsection{Phase-variance sweep and replication}
+\label{sec:sigmasweep}
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+$\sigma_\delta/2\pi$ (MHz) & 0.5 & 1 & 2.5 & 5 & 8 & 16\\
+$\sigma_\phi^2$ & 0.0016 & 0.0064 & 0.040 & 0.16 & 0.41 & 1.6\\
+\midrule
+$\Rt(0.05)$ & $-0.001^{\dagger}$ & $-0.002$ & $+0.002$ & $+0.029$ & $+0.077$ & $+0.275$\\
+95\% CI & & $[-0.005,0.001]$ & $[-0.003,0.007]$ & $[0.026,0.032]$ & $[0.068,0.085]$ & $[0.247,0.298]$\\
+$\Rt(0.20)$ & $-0.026^{\dagger}$ & $+0.000$ & $+0.002$ & $+0.013$ & $+0.034$ & $+0.135$\\
+\bottomrule
+\end{tabular}
+\caption{E4, 2 levels, detuning noise only, $T_g=12.7$~ns, full Lindblad.
+The reverse warm start returns to $\umean$ at 5, 8 and 16~MHz (same basin),
+so these are genuine in-basin shifts. $^{\dagger}$Losses $\sim10^{-5}$,
+at the optimizer's precision floor; the comparator was upgraded by a reverse
+start.}
+\label{tab:sigma}
+\end{table}
+
+
+
+On a bare qubit with detuning noise alone, the setting closest to
+Theorem~\ref{M-thm:main}, $\Rt$ is zero within its confidence interval for
+$\sigma_\phi^2\le0.04$. This is direct numerical confirmation of the theorem
+in its stated regime (Sec.~\ref{sec:proofs}). Beyond
+$\sigma_\phi^2\approx0.1$ it grows smoothly and monotonically, reaching
+$0.275$ at $\sigma_\phi^2=1.6$ (Table~\ref{tab:sigma}). At every divergent
+point the mean optimizer, restarted from $\ucvar$, walks back to $\umean$:
+the two optima sit in one basin, and CVaR genuinely shifts the solution
+within it.
+
+\paragraph{Replication.} Repeating two points with two new noise seeds
+(E6): at $\sigma_\phi^2=1.6$, $\Rt(0.05)=0.275$, $0.271$ and $0.314$ for the
+three seeds, all with confidence intervals far from zero. At
+$\sigma_\phi^2=0.16$, $\Rt(0.05)=0.029$ and $0.036$ for two seeds. For the
+third, the multistart comparison gives $+0.050$, but a reverse start from the
+$\alpha=0.2$ CVaR control found a mean control with a better $\alpha=0.05$ tail
+than the $\alpha=0.05$ CVaR search reached ($\Rt=-0.40$ against it): a CVaR
+search failure of the kind described in pitfall~7, not a reversal of the
+effect.
+
+
+\subsection{Several channels}
+\label{sec:stage1}
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+\multicolumn{7}{@{}l}{\emph{Amplitude width, $\rho=0$}}\\
+$\sigma_\gamma$ & 0.01 & 0.02 & 0.04 & 0.08 & 0.127 & 0.127, no detuning\\
+$\Rt(0.05)$ & $-0.134^{\circ}$ & $-0.029$ & $-0.013$ & $+0.044$ & $+0.017$ & $+0.084^{\circ}$\\
+95\% CI & $[-0.16,-0.11]$ & $[-0.06,0.00]$ & $[-0.03,0.01]$ & $[0.01,0.08]$ & $[-0.01,0.04]$ & $[-0.04,0.18]$\\
+$\kappa$ & 0.08 & 0.10 & 0.12 & 0.23 & 0.53 & --\\
+\midrule
+\multicolumn{7}{@{}l}{\emph{Correlation, $\sigma_\gamma=0.127$}}\\
+$\rho$ & $-0.99$ & $-0.9$ & $-0.5$ & $+0.5$ & $+0.9$ & $+0.99$\\
+$\Rt(0.05)$ & $+0.226$ & $+0.167$ & $+0.114$ & $+0.013$ & $+0.077$ & $+0.289$\\
+95\% CI & $[0.13,0.30]$ & $[0.08,0.24]$ & $[0.05,0.17]$ & $[-0.01,0.04]$ & $[0.07,0.09]$ & $[0.24,0.34]$\\
+$\kappa$ & 1.98 & 1.12 & 0.66 & 0.47 & 0.83 & 1.73\\
+\bottomrule
+\end{tabular}
+\caption{E7, 2 levels, $T_g=12.7$~ns, full Lindblad, against the best mean
+control. $\kappa=|Q|/|A|$ for the mean control. Replication seeds: at
+$\sigma_\gamma=0.08$, $+0.028$ $[0.01,0.05]$ and $+0.003$ $[-0.02,0.02]$; at
+$\rho=+0.99$, $+0.073$ $[-0.08,0.20]$ and $+0.334$ $[0.29,0.37]$.
+$^{\circ}$Comparator upgraded by a reverse start.}
+\label{tab:stage1}
+\end{table}
+
+
+\paragraph{P1 and P2: the two-axis mechanism is real but weak.} With both
+channels independent, the objectives stay within a few percent of each other
+over the whole amplitude range (Table~\ref{tab:stage1}). The one significant
+positive point, $\sigma_\gamma=0.08$, replicates weakly ($+0.044$, $+0.028$,
+$+0.003$ over three seeds). The geometric signature Proposition~\ref{M-prop:twoaxis}
+predicts, a more isotropic CVaR control, appears in the first seed (loss
+anisotropy $A=0.87\to0.79$) but not in the other two ($0.75\to0.74$,
+$0.88\to0.89$). The two-axis mechanism is therefore allowed by the theory but
+contributes little in practice: optimized controls can change the split of
+their error between the axes only slightly. Amplitude noise alone at
+$\sigma_\gamma=0.127$ gives no significant divergence either.
+
+\begin{figure}[htbp]
+\centering
+\figorbox{figures/fig_clouds.pdf}{\textwidth}
+\caption{Error clouds: the error rotation vector of each of the 1000 test
+draws, projected onto its two principal axes and coloured by loss, for the
+mean and $\cvar_{0.05}$ controls at $\sigma_\gamma=0.127$. Cross: zero
+error. Circle: the average error of the cloud. Left pair ($\rho=0$): the
+cloud is two-dimensional, curved by second-order error, and the two controls
+are almost identical. Right pair ($\rho=0.99$): the linear spread is
+cancelled along one direction and the cloud collapses to a thin,
+one-sided streak. The CVaR control shifts the whole streak (circle to the
+left of the cross), so that its long right-hand tail is pulled back towards
+zero at the cost of the typical draw.}
+\label{fig:clouds}
+\end{figure}
+
+\paragraph{P3's condition fails, and the reason is informative.} Read
+unconditionally, as it was first framed, P3 fails: correlating the channels
+does not restore equivalence but produces the largest divergences of the
+whole study, $\Rt=0.23$ at $\rho=-0.99$ and $0.29$ at $\rho=+0.99$, with every
+reverse start returning to $\umean$. The error clouds show why. With
+correlated noise the pulse need only cancel one combined first-order error
+direction instead of two, and it does: the first-order response along the
+combined noise direction $x_1\pm x_2$ (the one that dominates as
+$|\rho|\to1$) falls from $0.076$ at $\rho=0$ to $0.013$--$0.017$ at
+$|\rho|=0.99$, and the mean loss of $\umean$ drops fourfold. What remains is
+second order in the single noise variable, so the linear-coupling condition
+of P3 fails, with $\kappa$ above 1. Figure~\ref{fig:clouds} shows the
+difference directly: the independent-channel cloud is a broad two-dimensional
+fan, whereas the correlated-channel cloud is a narrow, one-sided streak whose
+extent is set by the second-order term. Rank-one \emph{noise} is not rank-one
+\emph{linear error}: the optimization itself removes the linearity that
+equivalence needs. One of three seeds at $\rho=+0.99$ is not significant
+($+0.073$, with a wide interval); the other two are.
+
+\begin{figure}[htbp]
+\centering
+\figorbox{figures/fig_pulses.pdf}{0.9\textwidth}
+\caption{Mean and $\cvar_{0.05}$ controls at $\sigma_\gamma=0.127$ (filtered
+envelopes as applied to the qubit). Top two rows: the in-phase and quadrature
+envelopes, visually indistinguishable at this scale. Bottom row: their
+difference. With independent channels (left) the CVaR control differs by
+0.8\% in norm; with correlated channels (right) by 6.6\%, with an oscillating
+correction of a few MHz, the change that produces a 29\% lower tail
+infidelity.}
+\label{fig:pulses}
+\end{figure}
+
+\paragraph{How different are the pulses?} Divergent CVaR controls are small
+modifications of the mean controls (Fig.~\ref{fig:pulses}). At the strongest
+Stage-1 divergence the relative change in the control envelopes is 6.6\%,
+against 0.8\% at a non-divergent point; in the gate-time sweep (E2) the CVaR optimizer moved
+the pulse by 1--2\% in the equivalence region. Wherever the reverse start
+returns to $\umean$, the two objectives select nearby points in one basin,
+not different pulse families. The effect of the
+small change on the error is nonetheless large and systematic, as the next
+section shows.
+
+
+\label{sec:pulses}
+
+\subsection{Independence of the experimental parameters}
+\label{sec:independence}
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+covariate & marginal & given $\kappa$ & given $R^{\mathrm{model}}$\\
+\midrule
+$|\rho|$ & $+0.70$ & $-0.00$ ($p=0.98$) & $+0.08$ ($p=0.69$)\\
+detuning phase variance $\sigma_\phi^2$ & $+0.09$ & $+0.24$ ($p=0.22$) & $-0.03$ ($p=0.90$)\\
+amplitude phase variance & $+0.53$ & $-0.19$ ($p=0.32$) & $+0.28$ ($p=0.15$)\\
+total phase variance & $+0.41$ & $+0.25$ ($p=0.20$) & $+0.10$ ($p=0.60$)\\
+gate time $T_g$ & $-0.29$ & $-0.38$ ($p=0.05$) & $-0.15$ ($p=0.45$)\\
+\bottomrule
+\end{tabular}
+\caption{Does $\kappa$ carry the information of the experimental knobs?
+Spearman correlation of $\Rt(0.05)$ with each covariate, marginal and partial
+(controlling for $\kappa$ or $R^{\mathrm{model}}$), 28 two-level points,
+including the prospective test. Conversely, $\kappa$ keeps a partial
+correlation of $0.61$--$0.84$ ($p\le6\times10^{-4}$) and $R^{\mathrm{model}}$
+of $0.78$--$0.89$ ($p\le10^{-6}$) against every covariate.}
+\label{tab:independence}
+\end{table}
+
+\paragraph{Independence of the knobs.} Correlation $|\rho|$ predicts $\Rt$ on
+its own (Spearman $0.70$), but once $\kappa$ is known it adds nothing (partial
+$-0.00$, $p=0.98$); the same holds for noise strength
+(Table~\ref{tab:independence}). Gate time keeps a borderline residual given
+$\kappa$ ($-0.38$, $p=0.05$, one of ten tests), driven by the 8~ns point, which
+diverges strongly at a moderate $\kappa=0.82$. It disappears given
+$R^{\mathrm{model}}$ ($p=0.45$): the extra information is in the error
+geometry, which $\kappa$ discards and the reduced model keeps. Within these data, $\rho$, $T_g$ and noise strength
+affect the divergence only through $\kappa$ and the error geometry, as
+Proposition~\ref{M-prop:reduced} requires. This test is observational: the
+covariates were not varied independently of one another, and the two-level
+data cover $T_g$ only between 6.3 and 32.5~ns.
+
+
+\subsection{Pre-compensation offsets}
+
+The offsets of Fig.~\ref{M-fig:precomp}(c), per point (coherent offset
+$c=-\mathbf e_0\cdot\mathbf q/|\mathbf q|^2$ of each control, in units of its
+second-order error): detuning scan at 5, 8 and 16~MHz: mean control
+$0.51$, $0.51$, $0.49$; $\cvar_{0.2}$ $1.61$, $1.62$, $1.71$;
+$\cvar_{0.05}$ $2.46$, $2.48$, $2.54$. Correlated channels, $\cvar_{0.05}$:
+$2.00$ ($\rho=-0.99$), $1.87$ ($-0.9$), $1.02$ ($+0.9$), $1.98$ and $2.52$
+($+0.99$, two seeds), and $1.63$, $1.94$, $2.03$, $2.46$ at the four points of
+the prospective test; $\cvar_{0.2}$ $1.15$--$1.80$; mean controls
+$0.73$--$0.94$. The exception $\rho=+0.9$ retains a large second noise
+direction.
+
+% =====================================================================
+\section{Dominance test: details}
+\label{sec:dominancedetails}
+\paragraph*{Pools and statistics.} The candidate pool of a setting contains a
+geometrically thinned subset of the L-BFGS-B iterates of every run (mean,
+CVaR at $\alpha=0.05$ and $0.2$, reverse starts) plus every run's final
+control, deduplicated. Every candidate is evaluated with the closed-system
+simulator on a fresh ensemble of 4000 draws (seed $44+1000s$), split into two
+halves of 2000. Statistics are computed over the competitive candidates (mean
+loss within a factor of two of the pool's best). The full-Lindblad
+$\Rt$ of the standard comparison is computed as in the rest of the study.
+A confirmed reversal requires a separation of more than 2\% in both mean and
+$\cvar_{0.05}$ on both halves, with the same orientation on both halves. The
+pool regret selects the best-mean and best-CVaR candidates on one half,
+scores both by $\cvar_{0.05}$ on the other,
+$R_{\mathrm{pool}}=1-\cvar(\text{best-CVaR})/\cvar(\text{best-mean})$, and
+averages the two assignments.
+
+\paragraph*{Transmon and second basin.} With four levels the same pattern
+holds, shifted. Reversals stay near 1\% at the smallest noise instead of zero,
+and the shape ratio is 1.8--3.1 instead of 5.58, because a noise-independent
+leakage floor makes up 56--84\% of the mean loss there. At 20.8~ns the
+transmon crosses over earlier than the qubit (4.6\% reversals at
+$\sigma_\phi^2=0.04$, 22\% at 0.16). At 8 and 20~ns and $\sigma_\phi^2=1.6$
+the competitive pool is dominated by a second basin, found by the reverse
+starts, with a four to five times lower mean loss but a heavier relative tail
+($\cvar_{0.05}/\text{mean}\approx10$).
+
+\paragraph*{The unrestricted crossing test.}
+\label{sec:crossing}
+Table~\ref{tab:crossing} lists, for every two-level setting with
+$\sigma_\phi^2\le0.04$, the crossing statistic as first specified (any
+crossing of the quantile functions by more than 2\%, no mean separation
+required), together with the location of the crossings and the fraction of
+crossing pairs in which the control with the lower mean has the larger
+noise-free loss $L_0$. The crossings are all located in the lower half of the
+distribution, and in all but one seed they are driven by the coherent error.
+The lowest quantiles of a $\chi^2_1$ loss are tiny ($0.4\%$ of the mean at
+$q=0.05$), so a residual coherent error of a few tenths of a percent of the
+mean decides them, whereas the upper half, which determines both the mean
+and the CVaR, is set by the noise. The restricted statistic of the main text
+(pairs with at least 10\% mean separation, crossings at $q\ge0.5$) is zero at
+all of these settings.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}rrrrrrrr@{}}
+\toprule
+$T_g$ (ns) & seed & $\sigma_\phi^2$ & crossing pairs & fraction & median $q$ & max $q$ & lower mean has larger $L_0$\\
+\midrule
+8 & 0 & 0.0016 & 250 & 0.113 & 0.06 & 0.19 & 0.96\\
+8 & 0 & 0.0064 & 988 & 0.233 & 0.07 & 0.25 & 0.91\\
+8 & 0 & 0.04 & 1343 & 0.268 & 0.19 & 0.45 & 0.91\\
+12.7 & 0 & 0.0016 & 257 & 0.133 & 0.07 & 0.42 & 0.98\\
+12.7 & 1 & 0.0016 & 141 & 0.192 & 0.10 & 0.36 & 0.96\\
+12.7 & 2 & 0.0016 & 45 & 0.045 & 0.05 & 0.09 & 0.49\\
+12.7 & 0 & 0.0064 & 194 & 0.119 & 0.08 & 0.27 & 0.84\\
+12.7 & 1 & 0.0064 & 277 & 0.210 & 0.07 & 0.34 & 0.91\\
+12.7 & 2 & 0.0064 & 107 & 0.103 & 0.07 & 0.12 & 0.29\\
+12.7 & 0 & 0.04 & 663 & 0.215 & 0.17 & 0.41 & 0.96\\
+12.7 & 1 & 0.04 & 1232 & 0.308 & 0.15 & 0.46 & 0.93\\
+12.7 & 2 & 0.04 & 677 & 0.240 & 0.12 & 0.43 & 0.78\\
+20 & 0 & 0.0016 & 64 & 0.062 & 0.08 & 0.16 & 0.97\\
+20 & 0 & 0.0064 & 151 & 0.146 & 0.08 & 0.27 & 0.95\\
+20 & 0 & 0.04 & 469 & 0.270 & 0.15 & 0.44 & 0.93\\
+\bottomrule
+\end{tabular}
+\caption{Unrestricted crossing test at small noise, two levels. ``median
+$q$'' and ``max $q$'': median and maximum over crossing pairs of the quantile
+level of the largest crossing.}
+\label{tab:crossing}
+\end{table}
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+family & $\tau$ & reversals & $R_{\mathrm{pool}}$\\
+\midrule
+ordered, $\sin^2(\sigma_iZ/2)$ & $1$ & $0$ & $0$\\
+pre-compensation, $(Z^2-c_i)^2$ & $-0.46$ & $0.76$ & $0.42$\\
+\bottomrule
+\end{tabular}
+\caption{Synthetic validation of the statistics (\texttt{stage2.py selftest}), run before the production run.}
+\label{tab:synthetic}
+\end{table}
+
+% =====================================================================
+\section{The controlled experiment, leakage-aware $\kappa$, and generality}
+\label{sec:stage3}
+
+\subsection{Design and calibration}
+\label{sec:stage3design}
+
+$\kappa$ is a property of the mean-optimal control and is therefore known only
+after an optimization, so a design that holds it fixed has to solve for the
+noise level that produces it. For each cell $(\kappa^\star,\rho,T_g)$ of the
+grid $\kappa^\star\in\{0.20,0.35,0.55\}$, $\rho\in\{0,0.5,0.9\}$,
+$T_g\in\{8,12.7,20\}$~ns we scale the base widths
+$(\sigma_\delta,\sigma_\gamma)=(2.5~\mathrm{MHz},0.127)$ by one number $s$ and
+solve $\kappa(s)=\kappa^\star$ by secant iteration in $\log s$, seeded with the
+empirical scaling $\kappa\propto s^{1/2}$ and stopped at
+$|\log\kappa/\kappa^\star|<\log 1.05$ or six evaluations. Each evaluation is a
+complete mean multistart plus a fit of Eq.~(\ref{M-eq:expansion}) on the test
+ensemble. The 27 cells took 112 mean optimizations; 21 converged inside the
+5\% tolerance, and the worst cell ended 25\% away.
+
+Each calibrated cell is then run with the standard protocol of
+Sec.~\ref{sec:fairnessall} at two noise seeds, and the calibrated control is offered
+to the mean side as one of its restarts (the CVaR side is warm-started from
+the selected mean control as always, so this keeps the comparison
+conservative). The run's mean control is nevertheless better optimized than
+the calibration's and cancels more linear error, so its $\kappa$ is larger:
+by a median factor $1.08$ over the 54 points, $1.30$ at $T_g=8$~ns, and up to
+$1.74$ in one cell. The achieved ranges are $0.18$--$0.33$, $0.35$--$0.56$ and
+$0.51$--$0.74$ for the three rows, which overlap slightly; all analyses use the
+measured $\kappa$ of the control that was run.
+
+\paragraph*{Statistics.} Because a cell can return $\Rt\le0$, ratios to a
+prediction are not usable (a clipped ratio turns "no gain" into an arbitrarily
+large log-residual), and with three cells per knob value a Kruskal--Wallis test
+has little power. The tests reported in the main text are therefore partial
+rank correlations of $\Rt$ with a knob, controlling for $\kappa$ or for $\Rm$,
+computed over all 54 points and over the 36 whose mean loss exceeds the
+$T_1/T_2$ floor of $3\times10^{-4}$. Below that floor the CVaR estimate is
+dominated by its six training draws: six of the eighteen $\rho=0.9$ cells
+return a significantly negative $\Rt$.
+
+\subsection{Leakage-aware error coordinates}
+\label{sec:leakmetric}
+
+Let $U$ be the full $N$-level propagator of a draw and
+$E=U_{\mathrm{target}}^\dagger U$ with the target embedded as the identity on
+levels $\ge2$. Write $E_q$ for the qubit block and $l_{kj}=E_{kj}=U_{kj}$,
+$k\ge2$, $j\in\{0,1\}$ for the leakage amplitudes. Taking the polar factor
+$W_u$ of $E_q$, normalizing it to $SU(2)$ and applying the \emph{same} global
+phase to $l$ (a gauge choice, since the loss is invariant under it) gives the
+coordinate
+$x=(\bm\epsilon;\,\mathrm{Re}\,l;\,\mathrm{Im}\,l)\in\mathbb R^{3+4(N-2)}$.
+
+Since $U$ is unitary, $E_q^\dagger E_q+l^\dagger l=I$, so
+$E_q=W_u(I-l^\dagger l)^{1/2}\approx W_u(I-\tfrac12l^\dagger l)$ and, for an
+input $\psi$ in the computational subspace,
+\[
+F_\psi=|\langle\psi|E_q|\psi\rangle|^2
+\approx1-\tfrac14\big[\epsilon^2-(\bm\epsilon\cdot\mathbf r)^2\big]-\langle\psi|l^\dagger l|\psi\rangle .
+\]
+Averaging over the four inputs gives the metric of Sec.~\ref{sec:W} for the
+rotation part and $\bar P_{\rm leak}=\tfrac14\sum_\psi\langle\psi|l^\dagger l|\psi\rangle$
+for the leakage part; the loss $L=1-\bar F+\lambda\bar P_{\rm leak}$ therefore
+carries $(1+\lambda)$ on the leakage term. With
+$S=\sum_\psi|\psi\rangle\langle\psi|=2I+\tfrac12(X+Y)$ and $G=\bar S$,
+\[
+\bar P_{\rm leak}=\tfrac14\sum_{k\ge2}l_k^\dagger G\,l_k ,
+\]
+which in the real coordinates $(\mathrm{Re}\,l,\mathrm{Im}\,l)$ is the
+positive-definite form quoted in the main text. \texttt{stage3.py selftest}
+checks it against the exact four-state loss of random unitaries: the relative
+error is $2\times10^{-5}$ at an error size of $3\times10^{-4}$ and falls as the
+cube of that size, as a second-order metric must.
+
+The mechanism variable in these coordinates is
+$\kappa_{\rm lk}=\|W^{1/2}Q\|_F/\|W^{1/2}A\|_F$, and the reduced model is
+evaluated in the same space, with the offset free in all coordinates. For
+$N=2$ the leakage block is empty and $\kappa_{\rm lk}$ reduces to the
+metric-weighted $\kappa_W$, which differs from $\kappa$ only by the weighting
+$W_\epsilon=\mathrm{diag}(3,3,2)/16$.
+
+\subsection{Generality grid}
+\label{sec:stage3generality}
+
+The target rotation is installed by rebuilding the closed-system model with
+$U_{\mathrm{target}}=\exp(-i\theta\,\hat n\!\cdot\!\bm\sigma/2)$ embedded in
+the $N$-level space; the amplitude budget scales with $\theta$, so
+$X_\pi$ is as tightly constrained as $X_{\pi/2}$, and the Hann seed is scaled
+to the correct area. Bases are (i) the $M$ Hann-windowed sine modes per
+quadrature of Sec.~\ref{sec:modeldetails}, (ii) $M=6$ of them, and (iii) $M$
+windowed piecewise-constant segments, which matches the parameter count of
+(i) at $M=17$. Anharmonicity is varied on the four-level model only.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.98\textwidth]{fig_stage3_generality.pdf}
+\caption{The generality grid. (a) $\Rt$ against $\kappa$ for the three
+rotation angles (two-level, 17 sine modes) and for the four-level
+anharmonicity scan. (b) The pulse-basis comparison at $X_{\pi/2}$: 17 sine
+modes against 17 piecewise-constant segments (the same number of parameters)
+and 6 sine modes. The two piecewise-constant points are the outliers, one of
+them at $\Rt=-0.31$. (c) Measured against the reduced model over all 22
+points.}
+\label{fig:generality}
+\end{figure}
+
+Two caveats limit what these points can be compared with. First, the Lindblad
+worker has the $X_{\pi/2}$ target at $-200$~MHz compiled into it, so points
+with another target or anharmonicity are closed-system only; their JSON
+records this and the validation step skips them. Second, and consequently, the
+best-mean comparator of Sec.~\ref{sec:fairnessall}, which the Lindblad validation
+applies, had to be applied separately to the saved closed-system losses
+(\texttt{stage3\_recomp.py}). It changed 46 of the 76 Stage-3 points, by more
+than $0.05$ at four of them; at the two-level $X_{\pi/2}$ point with 17 modes
+it removed a spurious $\Rt=+0.31$, bringing it to $-0.02$ in agreement with
+the phase-variance sweep at the same setting. The numbers reported in the main
+text and in Table~\ref{tab:stage3C} are the corrected ones.
+
+\begin{table}[htbp]
+\centering\scriptsize\setlength{\tabcolsep}{3.5pt}
+\caption{The controlled experiment, all 54 points. $\kappa_{\rm cal}$: the
+calibration control; $\kappa_{\rm run}$: the control actually run; $C$: the
+coefficient of Eq.~(\ref{M-eq:kappa2}); $\Rm$: reduced model; $\Rt$:
+closed-system, best-mean comparator, $\alpha=0.05$. $\sigma_\delta$ in MHz.}
+\label{tab:stage3A}
+\begin{tabular}{@{}cccccccccccc@{}}
+\toprule
+$\kappa^\star$ & $\rho$ & $T_g$ & seed & $\sigma_\delta$ & $\sigma_\gamma$ &
+$\kappa_{\rm cal}$ & $\kappa_{\rm run}$ & $C$ & $\Rm$ & $\Rt$ & $\E L$\\
+\midrule
+0.20 & 0.0 & 8 & 0 & 2.41 & 0.122 & 0.257 & 0.310 & 1.98 & 0.123 & $+0.094$ & 2e-03 \\
+0.20 & 0.0 & 8 & 1 & 2.41 & 0.122 & 0.257 & 0.280 & 3.57 & 0.164 & $+0.138$ & 2e-03 \\
+0.20 & 0.0 & 12.7 & 0 & 1.26 & 0.064 & 0.206 & 0.245 & 0.22 & 0.018 & $-0.025$ & 4e-04 \\
+0.20 & 0.0 & 12.7 & 1 & 1.26 & 0.064 & 0.206 & 0.236 & 0.13 & 0.011 & $-0.055$ & 4e-04 \\
+0.20 & 0.0 & 20 & 0 & 1.28 & 0.065 & 0.193 & 0.194 & 0.74 & 0.023 & $-0.005$ & 8e-04 \\
+0.20 & 0.0 & 20 & 1 & 1.28 & 0.065 & 0.193 & 0.178 & 1.25 & 0.032 & $+0.012$ & 8e-04 \\
+0.20 & 0.5 & 8 & 0 & 1.54 & 0.078 & 0.209 & 0.274 & 1.32 & 0.087 & $-0.005$ & 5e-04 \\
+0.20 & 0.5 & 8 & 1 & 1.54 & 0.078 & 0.209 & 0.271 & 1.49 & 0.091 & $+0.050$ & 6e-04 \\
+0.20 & 0.5 & 12.7 & 0 & 0.83 & 0.042 & 0.207 & 0.228 & 0.07 & 0.007 & $-0.050$ & 1e-04 \\
+0.20 & 0.5 & 12.7 & 1 & 0.83 & 0.042 & 0.207 & 0.224 & 0.02 & 0.004 & $-0.016$ & 1e-04 \\
+0.20 & 0.5 & 20 & 0 & 0.91 & 0.046 & 0.191 & 0.206 & 0.12 & 0.006 & $-0.003$ & 2e-04 \\
+0.20 & 0.5 & 20 & 1 & 0.91 & 0.046 & 0.191 & 0.216 & 0.06 & 0.003 & $+0.025$ & 2e-04 \\
+0.20 & 0.9 & 8 & 0 & 1.04 & 0.053 & 0.188 & 0.327 & 0.24 & 0.071 & $-0.050$ & 8e-05 \\
+0.20 & 0.9 & 8 & 1 & 1.04 & 0.053 & 0.188 & 0.327 & 0.25 & 0.072 & $-0.021$ & 8e-05 \\
+0.20 & 0.9 & 12.7 & 0 & 0.41 & 0.021 & 0.208 & 0.217 & 0.01 & 0.005 & $-0.030$ & 7e-06 \\
+0.20 & 0.9 & 12.7 & 1 & 0.41 & 0.021 & 0.208 & 0.205 & 0.00 & 0.003 & $-0.160$ & 8e-06 \\
+0.20 & 0.9 & 20 & 0 & 0.49 & 0.025 & 0.209 & 0.227 & 0.01 & 0.007 & $+0.001$ & 2e-05 \\
+0.20 & 0.9 & 20 & 1 & 0.49 & 0.025 & 0.209 & 0.224 & 0.00 & 0.005 & $+0.001$ & 2e-05 \\
+0.35 & 0.0 & 8 & 0 & 3.24 & 0.165 & 0.365 & 0.394 & 3.19 & 0.219 & $+0.176$ & 4e-03 \\
+0.35 & 0.0 & 8 & 1 & 3.24 & 0.165 & 0.365 & 0.390 & 4.48 & 0.211 & $+0.187$ & 4e-03 \\
+0.35 & 0.0 & 12.7 & 0 & 1.97 & 0.100 & 0.357 & 0.376 & 0.12 & 0.036 & $-0.027$ & 1e-03 \\
+0.35 & 0.0 & 12.7 & 1 & 1.97 & 0.100 & 0.357 & 0.371 & 0.14 & 0.040 & $-0.100$ & 1e-03 \\
+0.35 & 0.0 & 20 & 0 & 2.67 & 0.136 & 0.428 & 0.367 & 0.07 & 0.012 & $-0.008$ & 4e-03 \\
+0.35 & 0.0 & 20 & 1 & 2.67 & 0.136 & 0.428 & 0.401 & 0.47 & 0.059 & $+0.036$ & 4e-03 \\
+0.35 & 0.5 & 8 & 0 & 2.21 & 0.112 & 0.355 & 0.379 & 2.15 & 0.171 & $+0.147$ & 1e-03 \\
+0.35 & 0.5 & 8 & 1 & 2.21 & 0.112 & 0.355 & 0.373 & 1.53 & 0.150 & $+0.082$ & 1e-03 \\
+0.35 & 0.5 & 12.7 & 0 & 1.52 & 0.077 & 0.357 & 0.385 & 0.02 & 0.034 & $+0.035$ & 4e-04 \\
+0.35 & 0.5 & 12.7 & 1 & 1.52 & 0.077 & 0.357 & 0.415 & 0.03 & 0.050 & $+0.053$ & 5e-04 \\
+0.35 & 0.5 & 20 & 0 & 1.58 & 0.080 & 0.341 & 0.351 & 0.08 & 0.022 & $-0.016$ & 8e-04 \\
+0.35 & 0.5 & 20 & 1 & 1.58 & 0.080 & 0.341 & 0.352 & 0.18 & 0.046 & $-0.026$ & 9e-04 \\
+0.35 & 0.9 & 8 & 0 & 1.91 & 0.097 & 0.345 & 0.561 & 2.94 & 0.326 & $+0.226$ & 4e-04 \\
+0.35 & 0.9 & 8 & 1 & 1.91 & 0.097 & 0.345 & 0.555 & 3.12 & 0.331 & $+0.039$ & 4e-04 \\
+0.35 & 0.9 & 12.7 & 0 & 0.70 & 0.035 & 0.347 & 0.380 & 0.00 & 0.046 & $-0.022$ & 2e-05 \\
+0.35 & 0.9 & 12.7 & 1 & 0.70 & 0.035 & 0.347 & 0.383 & 0.00 & 0.047 & $-0.049$ & 2e-05 \\
+0.35 & 0.9 & 20 & 0 & 0.77 & 0.039 & 0.359 & 0.370 & 0.04 & 0.053 & $-0.082$ & 4e-05 \\
+0.35 & 0.9 & 20 & 1 & 0.77 & 0.039 & 0.359 & 0.371 & 0.00 & 0.037 & $+0.011$ & 5e-05 \\
+0.55 & 0.0 & 8 & 0 & 6.37 & 0.324 & 0.503 & 0.742 & 3.40 & 0.327 & $+0.190$ & 2e-02 \\
+0.55 & 0.0 & 8 & 1 & 6.37 & 0.324 & 0.503 & 0.744 & 3.69 & 0.317 & $+0.183$ & 2e-02 \\
+0.55 & 0.0 & 12.7 & 0 & 3.20 & 0.162 & 0.556 & 0.610 & 0.13 & 0.124 & $-0.036$ & 4e-03 \\
+0.55 & 0.0 & 12.7 & 1 & 3.20 & 0.162 & 0.556 & 0.559 & 0.18 & 0.115 & $+0.101$ & 4e-03 \\
+0.55 & 0.0 & 20 & 0 & 3.74 & 0.190 & 0.530 & 0.521 & 0.55 & 0.084 & $+0.030$ & 9e-03 \\
+0.55 & 0.0 & 20 & 1 & 3.74 & 0.190 & 0.530 & 0.508 & 1.59 & 0.169 & $+0.120$ & 9e-03 \\
+0.55 & 0.5 & 8 & 0 & 4.03 & 0.205 & 0.465 & 0.656 & 3.25 & 0.306 & $+0.202$ & 5e-03 \\
+0.55 & 0.5 & 8 & 1 & 4.03 & 0.205 & 0.465 & 0.716 & 1.74 & 0.294 & $+0.068$ & 5e-03 \\
+0.55 & 0.5 & 12.7 & 0 & 2.08 & 0.106 & 0.533 & 0.530 & 0.02 & 0.093 & $+0.039$ & 9e-04 \\
+0.55 & 0.5 & 12.7 & 1 & 2.08 & 0.106 & 0.533 & 0.574 & 0.02 & 0.099 & $+0.023$ & 9e-04 \\
+0.55 & 0.5 & 20 & 0 & 2.55 & 0.129 & 0.529 & 0.528 & 0.03 & 0.055 & $+0.007$ & 3e-03 \\
+0.55 & 0.5 & 20 & 1 & 2.55 & 0.129 & 0.529 & 0.578 & 0.06 & 0.083 & $+0.074$ & 3e-03 \\
+0.55 & 0.9 & 8 & 0 & 2.14 & 0.109 & 0.488 & 0.600 & 4.87 & 0.356 & $+0.264$ & 5e-04 \\
+0.55 & 0.9 & 8 & 1 & 2.14 & 0.109 & 0.488 & 0.613 & 2.53 & 0.337 & $+0.086$ & 6e-04 \\
+0.55 & 0.9 & 12.7 & 0 & 1.07 & 0.054 & 0.560 & 0.593 & 0.01 & 0.151 & $+0.015$ & 6e-05 \\
+0.55 & 0.9 & 12.7 & 1 & 1.07 & 0.054 & 0.560 & 0.577 & 0.00 & 0.152 & $-0.132$ & 6e-05 \\
+0.55 & 0.9 & 20 & 0 & 1.35 & 0.068 & 0.576 & 0.628 & 0.12 & 0.197 & $+0.041$ & 2e-04 \\
+0.55 & 0.9 & 20 & 1 & 1.35 & 0.068 & 0.576 & 0.609 & 0.00 & 0.150 & $-0.011$ & 2e-04 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{The generality grid, all 22 points; anharmonicity in MHz, basis as
+described above, noise scale relative to $(2.5~\mathrm{MHz},0)$ at
+$T_g=12.7$~ns. Closed-system values with the best-mean comparator.}
+\label{tab:stage3C}
+\begin{tabular}{@{}cccccccccc@{}}
+\toprule
+levels & $\theta$ & anh. & basis & scale & $\kappa$ & $C$ & $\Rm$ & $\Rt$ & $\E L$\\
+\midrule
+2 & $\pi$ & -200 & 17 sine & 1 & 9.573 & 7.88 & 0.426 & $+0.344$ & 1e-07 \\
+2 & $\pi$ & -200 & 17 sine & 2 & 0.798 & 8.15 & 0.432 & $+0.554$ & 1e-08 \\
+2 & $\pi$ & -200 & 17 sine & 4 & 1.958 & 9.43 & 0.426 & $+0.277$ & 8e-07 \\
+2 & $\pi$ & -200 & 17 sine & 8 & 2.065 & 10.17 & 0.425 & $+0.335$ & 2e-05 \\
+2 & $\pi/2$ & -200 & 17 p.c. & 1 & 0.048 & 2.82 & 0.007 & $-0.305$ & 1e-04 \\
+2 & $\pi/2$ & -200 & 17 p.c. & 2 & 0.095 & 5.37 & 0.048 & $+0.132$ & 3e-04 \\
+2 & $\pi/2$ & -200 & 6 sine & 1 & 0.076 & 4.52 & 0.025 & $+0.003$ & 2e-04 \\
+2 & $\pi/2$ & -200 & 6 sine & 2 & 0.152 & 4.53 & 0.093 & $+0.028$ & 9e-04 \\
+2 & $\pi/2$ & -200 & 17 sine & 1 & 0.067 & 4.53 & 0.020 & $-0.020$ & 3e-04 \\
+2 & $\pi/2$ & -200 & 17 sine & 2 & 0.136 & 4.53 & 0.076 & $+0.006$ & 1e-03 \\
+2 & $\pi/2$ & -200 & 17 sine & 4 & 0.266 & 4.53 & 0.233 & $+0.117$ & 5e-03 \\
+2 & $\pi/2$ & -200 & 17 sine & 8 & 0.630 & 4.53 & 0.430 & $+0.392$ & 1e-02 \\
+2 & $\pi/4$ & -200 & 17 sine & 1 & 0.034 & 5.26 & 0.006 & $+0.000$ & 3e-03 \\
+2 & $\pi/4$ & -200 & 17 sine & 2 & 0.063 & 5.28 & 0.021 & $+0.012$ & 1e-02 \\
+2 & $\pi/4$ & -200 & 17 sine & 4 & 0.130 & 5.28 & 0.080 & $+0.033$ & 5e-02 \\
+2 & $\pi/4$ & -200 & 17 sine & 8 & 0.296 & 5.31 & 0.301 & $+0.031$ & 1e-01 \\
+4 & $\pi/2$ & -150 & 17 sine & 1 & 0.037 & 4.59 & 0.006 & $-0.006$ & 5e-03 \\
+4 & $\pi/2$ & -200 & 17 sine & 1 & 0.035 & 4.51 & 0.005 & $-0.012$ & 3e-03 \\
+4 & $\pi/2$ & -300 & 17 sine & 1 & 0.050 & 4.63 & 0.011 & $+0.013$ & 2e-03 \\
+4 & $\pi/2$ & -150 & 17 sine & 2 & 0.074 & 4.60 & 0.024 & $+0.014$ & 2e-02 \\
+4 & $\pi/2$ & -200 & 17 sine & 2 & 0.072 & 4.50 & 0.021 & $+0.022$ & 1e-02 \\
+4 & $\pi/2$ & -300 & 17 sine & 2 & 0.099 & 4.66 & 0.043 & $+0.030$ & 5e-03 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =====================================================================
+\section{Colored noise}
+\label{sec:stage4}
+
+\subsection{Ornstein--Uhlenbeck sampling and normalization}
+
+The detuning is replaced by an Ornstein--Uhlenbeck process
+$d\eta=-\eta\,dt/\tau_c+\sigma_{\mathrm{ou}}\sqrt{2/\tau_c}\,dW$, with
+stationary variance $\sigma_{\mathrm{ou}}^2$ and correlation
+$C(t,t')=\sigma_{\mathrm{ou}}^2e^{-|t-t'|/\tau_c}$. On the control grid of
+$n$ slices of width $dt$ it is sampled exactly as a stationary AR(1) chain,
+\begin{equation}
+\eta_{j+1}=a\eta_j+\sigma_{\mathrm{ou}}\sqrt{1-a^2}\,\xi_j,\qquad
+a=e^{-dt/\tau_c},
+\end{equation}
+with $\eta_0\sim\mathcal N(0,\sigma_{\mathrm{ou}}^2)$ and $\xi_j$ i.i.d.\
+standard normal, so no discretization error enters the noise itself. The
+accumulated phase over the gate is $\phi=dt\sum_j\eta_j$, whose variance is
+exactly
+\begin{equation}
+\mathrm{Var}(\phi)=\sigma_{\mathrm{ou}}^2\,dt^2\sum_{j,k=0}^{n-1}a^{|j-k|}
+=\sigma_{\mathrm{ou}}^2\,dt^2\Big(n+2\!\!\sum_{d=1}^{n-1}\!(n-d)a^{d}\Big).
+\end{equation}
+We solve this for $\sigma_{\mathrm{ou}}$ so that $\mathrm{Var}(\phi)$ equals
+the target $\sigma_\phi^2$ at every $\tau_c$. The quasi-static arm is the
+$\tau_c\to\infty$ limit of the same construction and reproduces the sampler of
+Sec.~\ref{sec:modeldetails}. Without this normalization a short-$\tau_c$ arm would simply
+be a weaker-noise arm, and the whole comparison would be confounded; the
+resulting $\sigma_{\mathrm{ou}}$ grows from $2.51$~MHz quasi-static to
+$18.9$~MHz at $\tau_c=0.1\,T_g$, $\sigma_\phi^2=0.41$, as it must.
+
+\subsection{Noise coordinates}
+
+The error-geometry fit of Sec.~\ref{sec:diagnostics} expands the error in whitened
+scalar noise coordinates. A trajectory has no single scalar, so we use the
+first two functionals of the path that a gate can resolve: the accumulated
+phase and its first time moment about the mid-gate instant,
+\begin{equation}
+z_1\propto dt\sum_j\eta_j,\qquad
+z_2\propto dt\sum_j(t_j-\bar t)\,\eta_j ,
+\end{equation}
+each centred over the ensemble, then $z_2$ orthogonalized against $z_1$ and
+both standardized. Under quasi-static noise $z_2$ vanishes identically, and
+the fit reduces to the scalar one. The reported $R^2_{\mathrm{fit}}$ is the
+smallest coefficient of determination over the components of the error vector
+when regressed on $(z_1,z_2)$ and their quadratic products; it measures
+whether two coordinates suffice. They do not at short correlation time, which
+is the honest limitation of this stage: $R^2_{\mathrm{fit}}$ falls to $0.010$
+at $\tau_c=0.1\,T_g$. A third and higher moments would extend the reduction,
+at the cost of a fit that needs many more draws to condition.
+
+\subsection{Design and scoring}
+
+The grid is $\tau_c/T_g\in\{0.1,0.3,1,3,10\}$ plus a quasi-static arm, crossed
+with $\sigma_\phi^2\in\{0.04,0.16,0.41\}$ and seeds $\{0,1\}$: $36$ points,
+all at $T_g=12.7$~ns on the two-level model, $17$ sine modes, with the
+fairness protocol of Sec.~\ref{sec:fairnessall} unchanged. The best-mean comparator
+is applied at save time rather than during validation, which is the fix for
+the pitfall recorded in Sec.~\ref{sec:stage3generality}; it upgraded $20$ of the
+$36$ points, by at most $0.064$.
+
+Four predictions were registered before the run. Two were met as stated (T1,
+memory independence; T4, the growth of the $z_2$ share), and two were
+mis-specified in ways the run exposed.
+
+\paragraph*{T2 was a special case.} The registered prediction was
+$\cvar_\alpha/\E=5.58$ at every point. That is $\rho_\alpha(1)$, and holds
+only when one noise direction reaches the gate. Proposition~\ref{M-prop:meff}
+supersedes it; the quasi-static arm, where $m_{\mathrm{eff}}=1$ by
+construction, returns $5.36$ and does satisfy the original form.
+
+\paragraph*{T3 was unattainable.} The registered threshold was
+$\mathrm{Spearman}(\kappa,\Rt)>0.6$. With two seeds per cell the replicate
+standard deviation of $\Rt$ is $\sigma_{\mathrm{noise}}=0.0205$ against a
+total $0.0256$, leaving $\sigma_{\mathrm{signal}}=0.0153$; classical
+attenuation then caps any observable correlation at
+$(1+\sigma^2_{\mathrm{noise}}/\sigma^2_{\mathrm{signal}})^{-1/2}=0.600$. The
+threshold demanded a perfect underlying correlation. We report disattenuated
+values instead: $\mathrm{Pearson}(\Rm,\Rt)=0.67$ observed, $1.12$
+disattenuated, and $\mathrm{Spearman}(\kappa,\Rt)=0.44$ observed, $0.74$
+disattenuated. The residual scatter about the fit is $0.0190$, or $0.93$ of
+the replicate scatter.
+
+Table~\ref{tab:stage4} lists every point. We record both re-specifications
+here rather than in the main text so that the original registration stays
+visible. Neither changes a conclusion in the
+direction that favours the theory: T2's correction makes the shape prediction
+harder, since it now must hold per control rather than as one number, and
+T3's makes the mechanism claim weaker, since it becomes a statement about
+consistency with a bound rather than about rank discrimination.
+
+\begin{table*}[t]
+\caption{All $36$ colored-noise points, ordered by decreasing correlation
+time. $\tau_c/T_g=\infty$ is the quasi-static arm. $C$ and $\Rm$ come from the
+two-coordinate reduction and should be read with $R^2_{\mathrm{fit}}$ in mind;
+ratio is $\cvar_{0.05}/\E$; the last column is the comparator selected by the
+best-mean rule of Sec.~\ref{sec:fairness}.}
+\label{tab:stage4}
+\begin{ruledtabular}
+\begin{tabular}{ccccccccccc l}
+$\tau_c/T_g$ & $\sigma_\phi^2$ & seed & $\kappa$ & $C$ & $C\kappa^2$ &
+$\Rm$ & $\Rt$ & ratio & $z_2$ share & $R^2_{\mathrm{fit}}$ & comparator\\
+\hline
+10 & 0.04 & 0 & 0.065 & 4.92 & 0.0207 & 0.0204 & +0.0089 & 4.40 & 0.270 & 0.984 & mean\\
+10 & 0.04 & 1 & 0.065 & 4.85 & 0.0204 & 0.0200 & -0.0431 & 4.48 & 0.273 & 0.982 & rev$_{0.2}$\\
+10 & 0.16 & 0 & 0.130 & 4.93 & 0.0836 & 0.0738 & +0.0278 & 4.36 & 0.287 & 0.983 & mean\\
+10 & 0.16 & 1 & 0.129 & 4.83 & 0.0800 & 0.0712 & -0.0122 & 4.43 & 0.286 & 0.981 & rev$_{0.05}$\\
+10 & 0.41 & 0 & 0.208 & 4.83 & 0.2087 & 0.1557 & +0.0599 & 4.32 & 0.305 & 0.980 & rev$_{0.05}$\\
+10 & 0.41 & 1 & 0.206 & 4.74 & 0.2001 & 0.1507 & +0.0258 & 4.36 & 0.306 & 0.977 & rev$_{0.2}$\\
+3 & 0.04 & 0 & 0.053 & 1.83 & 0.0052 & 0.0053 & -0.0092 & 3.98 & 0.551 & 0.961 & mean\\
+3 & 0.04 & 1 & 0.053 & 1.79 & 0.0051 & 0.0052 & +0.0020 & 4.14 & 0.543 & 0.961 & mean\\
+3 & 0.16 & 0 & 0.105 & 1.69 & 0.0185 & 0.0193 & -0.0092 & 3.96 & 0.555 & 0.944 & mean\\
+3 & 0.16 & 1 & 0.104 & 1.81 & 0.0196 & 0.0201 & -0.0043 & 4.12 & 0.549 & 0.961 & rev$_{0.2}$\\
+3 & 0.41 & 0 & 0.165 & 1.28 & 0.0348 & 0.0413 & -0.0028 & 3.95 & 0.586 & 0.962 & rev$_{0.05}$\\
+3 & 0.41 & 1 & 0.164 & 1.35 & 0.0362 & 0.0418 & -0.0031 & 4.07 & 0.578 & 0.957 & mean\\
+1 & 0.04 & 0 & 0.041 & 0.33 & 0.0006 & 0.0007 & -0.0372 & 4.21 & 0.703 & 0.853 & rev$_{0.2}$\\
+1 & 0.04 & 1 & 0.041 & 0.36 & 0.0006 & 0.0005 & -0.0072 & 4.42 & 0.750 & 0.908 & rev$_{0.05}$\\
+1 & 0.16 & 0 & 0.077 & 0.13 & 0.0007 & 0.0013 & +0.0000 & 4.33 & 0.771 & 0.909 & mean\\
+1 & 0.16 & 1 & 0.080 & 0.15 & 0.0009 & 0.0013 & -0.0070 & 4.40 & 0.761 & 0.931 & rev$_{0.05}$\\
+1 & 0.41 & 0 & 0.121 & 0.04 & 0.0006 & 0.0024 & -0.0027 & 4.29 & 0.790 & 0.883 & mean\\
+1 & 0.41 & 1 & 0.123 & 0.08 & 0.0012 & 0.0035 & -0.0083 & 4.34 & 0.776 & 0.890 & mean\\
+0.3 & 0.04 & 0 & 0.022 & 2.63 & 0.0012 & 0.0013 & -0.0032 & 3.65 & 0.602 & 0.390 & rev$_{0.2}$\\
+0.3 & 0.04 & 1 & 0.044 & 1.57 & 0.0030 & 0.0032 & -0.0173 & 3.63 & 0.581 & 0.422 & rev$_{0.2}$\\
+0.3 & 0.16 & 0 & 0.044 & 1.90 & 0.0037 & 0.0037 & +0.0027 & 3.63 & 0.604 & 0.389 & mean\\
+0.3 & 0.16 & 1 & 0.064 & 1.87 & 0.0077 & 0.0078 & -0.0380 & 3.61 & 0.540 & 0.495 & mean\\
+0.3 & 0.41 & 0 & 0.075 & 1.47 & 0.0083 & 0.0080 & +0.0077 & 3.58 & 0.607 & 0.395 & mean\\
+0.3 & 0.41 & 1 & 0.093 & 1.82 & 0.0159 & 0.0146 & -0.0323 & 3.57 & 0.543 & 0.504 & rev$_{0.2}$\\
+0.1 & 0.04 & 0 & 0.018 & 3.23 & 0.0011 & 0.0013 & -0.0050 & 3.83 & 0.652 & 0.196 & rev$_{0.2}$\\
+0.1 & 0.04 & 1 & 0.069 & 0.19 & 0.0009 & 0.0009 & -0.0077 & 3.44 & 0.669 & 0.264 & rev$_{0.05}$\\
+0.1 & 0.16 & 0 & 0.039 & 0.76 & 0.0012 & 0.0013 & -0.0147 & 3.65 & 0.789 & 0.062 & rev$_{0.2}$\\
+0.1 & 0.16 & 1 & 0.074 & 0.11 & 0.0006 & 0.0008 & -0.0017 & 3.49 & 0.797 & 0.092 & mean\\
+0.1 & 0.41 & 0 & 0.057 & 0.34 & 0.0011 & 0.0013 & -0.0077 & 3.77 & 0.844 & 0.010 & rev$_{0.2}$\\
+0.1 & 0.41 & 1 & 0.112 & 0.36 & 0.0046 & 0.0042 & +0.0174 & 3.33 & 0.704 & 0.213 & rev$_{0.2}$\\
+$\infty$ & 0.04 & 0 & 0.074 & 4.53 & 0.0247 & 0.0240 & +0.0040 & 5.17 & 0.000 & 1.000 & mean\\
+$\infty$ & 0.04 & 1 & 0.075 & 4.53 & 0.0252 & 0.0248 & -0.0236 & 5.36 & 0.000 & 1.000 & mean\\
+$\infty$ & 0.16 & 0 & 0.150 & 4.53 & 0.1023 & 0.0914 & +0.0282 & 5.16 & 0.000 & 0.999 & rev$_{0.05}$\\
+$\infty$ & 0.16 & 1 & 0.147 & 4.54 & 0.0985 & 0.0892 & -0.0511 & 5.37 & 0.000 & 0.999 & rev$_{0.2}$\\
+$\infty$ & 0.41 & 0 & 0.244 & 4.52 & 0.2684 & 0.2049 & +0.0716 & 5.11 & 0.000 & 0.996 & mean\\
+$\infty$ & 0.41 & 1 & 0.240 & 4.53 & 0.2606 & 0.1996 & +0.0386 & 5.22 & 0.000 & 0.995 & rev$_{0.05}$\\
+\end{tabular}
+\end{ruledtabular}
+\end{table*}
+
+% =====================================================================
+\section{Channel geometry}
+\label{sec:stage1b}
+
+\subsection{Design and calibration}
+The noise enters through two physically distinct channels: a static detuning
+$\delta$ of standard deviation $\sigma_\delta$ and a multiplicative
+drive-amplitude error of standard deviation $\sigma_a$, independent. We
+parameterize them by a mixing angle, $\sigma_\delta=s\cos\theta$ and
+$\sigma_a=s\sin\theta/\,\Omega_0$ with $\Omega_0$ the nominal Rabi rate, and
+step $\theta$ through nine values from $0^\circ$ to $90^\circ$ in
+$11.25^\circ$ increments. At each $\theta$ the overall scale $s$ is
+recalibrated by a secant search so that the mean loss of the mean-optimal
+control matches a common target; without that step the two channels would
+differ in both geometry and strength and the comparison would be confounded.
+Each probe of the search is a single short optimization ($120$ iterations)
+rather than a full multistart, with one full multistart run at the calibrated
+scale. Two seeds, $T_g=12.7$~ns, two-level model: $18$ points. The achieved
+mean losses are $3.1$--$8.8\times10^{-4}$ for $\theta<90^\circ$; at
+$\theta=90^\circ$ the control nulls the amplitude response almost entirely and
+the calibration cannot hold, giving $5$--$6\times10^{-6}$.
+
+\subsection{Pre-registered predictions and outcomes}
+\begin{description}
+\item[B1] The measured tail-to-mean ratio follows
+$\rho_\alpha(m_{\mathrm{eff}})$ as the channel split moves $m_{\mathrm{eff}}$,
+with $\mathrm{Spearman}>0.8$ and median relative error below $10\%$.
+\emph{Outcome: fails as written, passes when blocked on seed.} Pooled
+$\mathrm{Spearman}=+0.712$ ($p=9\times10^{-4}$), median error $7.2\%$. Within
+seeds, $+0.976$ ($p=3\times10^{-5}$) and $+0.952$ ($p=3\times10^{-4}$) at
+median errors $7.9\%$ and $3.4\%$; seed-centred over the $16$ in-regime
+points, $+0.962$ ($p=3\times10^{-9}$). The pooled statistic is defeated by a
+constant offset of $+0.563\pm0.141$ between the seeds against a prediction
+that varies by only $1.51$ across the whole range of $m_{\mathrm{eff}}$. The
+rank correlation of $m_{\mathrm{eff}}$ with the measured ratio is $-0.976$ and
+$-0.952$ against a predicted $-1$ exactly.
+\item[B2] Where the split moves $m_{\mathrm{eff}}$ by more than $0.3$, the CDFs
+of the mean- and CVaR-optimal controls cross. \emph{Outcome: not scored.} The
+design produced one such pair, so the test has no power. We report this rather
+than reporting ``0 of 1 crossings''.
+\item[B3] The $\kappa^2$ envelope continues to hold, $\max\Rt<0.10$.
+\emph{Outcome: fails on $18$ points, holds on the $16$ in regime.} The two
+failures are the $\theta=90^\circ$ pair, at $\kappa=6.26$ and $46.85$: a bound
+of the form $C\kappa^2+O(\kappa^3)$ is not a statement about $\kappa=47$.
+Excluding them, all remaining points have $\kappa\le0.116$ and
+$\max\Rt=0.0275$.
+\item[B4] One curve $\rho_\alpha(m_{\mathrm{eff}})$ fits both this route and
+the colored-noise route of Sec.~\ref{sec:stage4}; the two residual sets are
+not distinguishable. \emph{Outcome: passes.} Mann--Whitney $p=0.77$ on the
+$16$ in-regime points against the $18$ Stage~4 points with
+$R^2_{\mathrm{fit}}\ge0.94$ ($p=0.40$ including the $\theta=90^\circ$ pair).
+Medians $-1.5\%$ and $-0.1\%$; $10$th--$90$th percentiles $[-8.0,+3.9]\%$ and
+$[-7.4,+2.6]\%$. Pooled over all $34$ points,
+$\mathrm{Spearman}=+0.831$ ($p=1\times10^{-9}$) at a median absolute residual
+of $3.7\%$.
+\end{description}
+
+\subsection{Per-point table}
+$\theta$ in degrees; $\sigma_a$ is the relative amplitude error; ratio and
+prediction at $\alpha=0.05$; $\Rt$ against the best mean comparator. The last
+two rows are the excluded $\theta=90^\circ$ pair.
+\begin{center}\footnotesize\setlength{\tabcolsep}{4pt}
+\input{figures/tab_stage1b.tex}
+\end{center}
+
+% =====================================================================
+\section{Trajectory-level relaxation}
+\label{sec:stage5}
+
+\subsection{An exact one-jump decomposition}
+Amplitude damping is not a Gaussian perturbation of the propagator, so the
+machinery of Sec.~\ref{sec:proofs} does not apply and the loss distribution
+must be constructed directly. Monte Carlo wavefunction sampling would do it,
+but the quantity we need --- a tail average at $\alpha=10^{-4}$ --- is
+precisely the one trajectory sampling estimates worst. We instead expand in
+the number of jumps and keep every branch exactly.
+
+Let $a$ be the lowering operator, $n=a^\dagger a$ and $\Gamma=1/T_1$. On each
+control slice we use the Strang-split damped map
+\begin{equation}
+K_k=D^{1/2}U_kD^{1/2},\qquad D=\exp(-\tfrac{1}{2}\Gamma\,dt\,n),
+\label{eq:damped}
+\end{equation}
+so that the no-jump branch is $K_{N}\cdots K_1$. A single jump at slice $k$
+sends the state to the normalized collapsed state, after which the evolution
+is again no-jump. The observable for that branch is
+$\mathrm{Tr}(O\,S_k\sigma S_k^\dagger)=\mathrm{Tr}\big((S_k^\dagger OS_k)\sigma\big)$
+with $S_k=K_N\cdots K_{k+1}$, so all $N$ one-jump branches are obtained from a
+single backward recursion that accumulates $S_k^\dagger OS_k$. The cost is one
+extra pass over the time grid, and the truncation error is $O((\Gamma T)^2)$.
+
+Two details decide whether this agrees with the Lindblad channel, and both
+were caught by validation rather than by inspection.
+
+\emph{Bayes weighting.} The four input states of the average-gate-fidelity
+estimator do not have the same probability of producing a given record: the
+no-jump weight is $\mathrm{Tr}(K\rho_jK^\dagger)$, which depends on $j$. A
+plain average over inputs is therefore inconsistent with the channel and
+leaves an $O(\Gamma)$ discrepancy. Weighting each input by
+$P(j\mid r)\propto\mathrm{Tr}(K_r\rho_jK_r^\dagger)$ removes it: the residual
+disagreement with a direct Lindblad solve falls from $2.3\times10^{-5}$ to
+$1.2\times10^{-6}$ at $T_1=30\,\mu$s, which is $0.46\%$ of the $T_1$
+contribution itself.
+
+\emph{The jump weight.} The natural weight $\Gamma\,dt\,\langle n\rangle$ is
+inconsistent with the \emph{discretized} no-jump map at $O(\Gamma\,dt)$, which
+shows up as a drifting mass defect. The consistent choice is the telescoping
+trace loss of the map actually used,
+$m_{jk}=\mathrm{Tr}\,\rho_j(t_k)-\mathrm{Tr}\,K_k\rho_j(t_k)K_k^\dagger$,
+placed on the normalized collapsed state. With it, total probability is
+conserved to $0.8\,(\Gamma T)^2$ with no floor in $dt$. Across the whole study
+the largest residual mass defect is $2.2\times10^{-6}$.
+
+\emph{Validation.} Six self-tests run before every production job: exactness
+of the atomic $\cvar$ against a sorted brute-force reference including the
+boundary-atom split ($1.6\times10^{-15}$); the $\Gamma$-scaling of the
+discrepancy against a Lindblad reference; mass conservation against
+$(\Gamma T)^2$; agreement of $\rho_\alpha$ and $\Xi_\alpha$ with their
+closed forms; the mixture identity of Eq.~(\ref{M-eq:mixture}) on a two-channel
+toy; and the backward recursion against a direct $O(N^2)$ construction
+($6.7\times10^{-14}$). The last of these caught an off-by-one in the
+recursion --- the update $S_k^\dagger OS_k$ must be applied \emph{before}
+storing, since $S_k=S_{k+1}U_k$ --- which had produced a maximum relative
+error of $39$.
+
+\subsection{Design and scoring}
+The grid crosses $T_g\in\{12.7,40\}$~ns, $T_1\in\{10,30\}\,\mu$s and
+$\sigma_\phi^2\in\{0.04,0.16\}$ with two seeds on the two-level model, with
+$\sigma_\phi^2=0.16$ run at $T_g=40$~ns only, plus a four-level arm at
+$T_g=12.7$~ns, $T_1=10\,\mu$s, $\sigma_\phi^2=0.04$: $14$ points. Tail
+objectives are optimized at $\alpha\in\{0.20,0.05,0.01\}$ and every control is
+evaluated at $\alpha\in\{0.5,0.2,0.05,0.01,2\times10^{-3},5\times10^{-4},
+10^{-4}\}$. The fairness protocol of Sec.~\ref{sec:stage3design} is unchanged:
+common warm start, budget parity, reverse warm starts, and $\Rt$ scored against
+the best mean-side comparator. The comparator upgraded $13$ of the $14$ cells,
+by at most $0.188$ --- a larger fraction than any earlier stage, which is
+itself a statement about how flat the landscape is here.
+
+\subsection{Pre-registered predictions and outcomes}
+\begin{description}
+\item[P1] The shift in the integrated excited population between the mean and
+tail optima scales as $\Xi_\alpha=1/(\alpha\rho_\alpha)$.
+\emph{Outcome: the estimator is mis-specified; we do not score the
+prediction.} The through-origin slope of
+$(n_{\mathrm{free}}-n_{\cvar})$ on $(n_{\mathrm{free}}-n_{\mathrm{mean}})$ is
+$0.716$ (bootstrap CI $[0.254,3.790]$) against a predicted $3.583$, and it does
+not move as the resolution gate is tightened: $0.716$ at eleven points, $0.709$
+at eight, $0.660$ at five. Regression dilution would lift it; it does not.
+The identity presumed that $n_{\mathrm{int}}$ is the coordinate along which the
+dephasing/jump trade-off is resolved, and the spread table below shows it is
+not. The sign agrees at $13$ of $14$ points.
+\item[P2] $\beta$ orders $\Rt$ and $\kappa$ becomes inert.
+\emph{Outcome: the second half holds, the first fails.}
+$\mathrm{Spearman}(\beta,\Rt)=+0.222$ ($p=0.45$), and the same in every
+subset: $+0.112$ on the twelve two-level points, $+0.168$ dropping the two
+points with $\beta>10$, $+0.011$ scoring against the raw mean comparator.
+$\mathrm{Spearman}(\kappa,\Rt)=+0.249$ ($p=0.39$); partial given $\beta$,
+$+0.178$ ($p=0.56$). As in Sec.~\ref{sec:stage4}, the replicate scatter caps
+any such correlation: run-to-run standard deviation of $\Rt$ is $0.0316$
+against a total spread of $0.0402$, an attenuation ceiling of $0.62$, so the
+disattenuated values are $+0.36$ and $+0.40$. Neither is significant.
+\item[P3] Exceedances of the $\kappa^2$ envelope are expected, since Stage~5
+breaks (A1) by construction; not scored as a failure. \emph{Outcome:}
+$\max\Rt=0.030$ with six of $14$ positive. No large exceedance occurred.
+\item[P4] The tail-to-mean ratio follows Eq.~(\ref{M-eq:mixture}).
+\emph{Outcome: passes.} Median relative error $1.2\%$ over the twelve
+two-level points, every point above $r_\alpha$, across $\beta$ from $0.098$ to
+$63$. We record explicitly that the reported
+$\mathrm{Spearman}(\text{pred},\text{meas})=+0.991$ is \emph{not} an
+independent check --- the prediction is a monotone function of $\beta$ alone,
+so it equals $\mathrm{Spearman}(\beta,\text{ratio})$ to machine precision. The
+content of the test is the level agreement at no free parameters. The
+four-level arm degrades to $9.9\%$ and $16.7\%$, in both cases with the
+measurement below the prediction, as a third (leakage) channel would require.
+\end{description}
+
+\subsection{Weight and leverage}
+The reason P2 fails is visible in how little of the jump channel the control
+can reach. Over the eight controls optimized at each point --- free, mean,
+three tail levels, three reverse warm starts --- the fractional spread
+$(\max-\min)/\mathrm{mean}$ is a median $0.9\%$ for the jump loss $\ell_j$
+(worst case $2.0\%$), a median $1.4\%$ for $n_{\mathrm{int}}$ (worst
+$3.5\%$), and a median $45\%$ for the dephasing loss they are traded against
+(worst $573\%$). The jump probability is pinned by the gate's own requirement
+on the integrated excited population, and the cost of a relaxation event is
+set by the target unitary. A tail objective multiplies the weight on that
+channel by $\Xi_\alpha=3.58$; there is nothing for the extra weight to act on.
+
+Two cells at $\sigma_\phi^2=0.16$ make the point sharply. At seed $1$ the
+optimizer reaches a basin in which the linear phase response is almost
+completely cancelled: $\E L_{\mathrm{deph}}$ falls by a factor of $73$ against
+the seed-$0$ sibling, the mean loss improves from $2.82\times10^{-3}$ to
+$1.35\times10^{-3}$, $\kappa$ rises from $0.128$ to $6.21$ because $\|A\|_F$
+collapses, and $\beta$ reaches $63$. All eight controls at that point land in
+the same basin, so it is a property of the problem and not of one restart.
+$\Rt$ there is $-0.0008$.
+
+\subsection{Per-point table}
+$T_g$ in ns, $T_1$ in $\mu$s, ratio at $\alpha=0.05$, $\Rt$ against the best
+mean comparator.
+\begin{center}\footnotesize\setlength{\tabcolsep}{4pt}
+\input{figures/tab_stage5.tex}
+\end{center}
+
+% =====================================================================
+\section{The measurement-only predictor}
+\label{sec:s13}
+
+This section gives the construction behind Sec.~\ref{M-sec:predictor} of the
+main text, the protocol correction it forced, and the gating rules used to
+score it.
+
+\subsection{Construction}
+
+Let $\{\epsilon_k\}_{k=1}^{K}$ be the error coordinates of the test ensemble
+under a control $u$, with weights $w_k$, losses
+$L_k=\epsilon_k^{\mathsf T}W\epsilon_k$, and let
+$T_\alpha=\{k: L_k\ge \mathrm{VaR}_\alpha\}$ carry total weight $\alpha$. The
+tail-conditional displacement is
+\begin{equation}
+d_\alpha=\frac{1}{\alpha}\sum_{k\in T_\alpha} w_k\epsilon_k-\sum_k w_k\epsilon_k ,
+\tag{S-disp}
+\end{equation}
+and the object of interest is the change in $\cvar_\alpha$ under a common
+offset $\epsilon_k\mapsto\epsilon_k-t\,d_\alpha$ applied to every draw.
+
+Three corrections separate a usable predictor from the naive one.
+
+\emph{(i) Curvature.} The naive Hessian of $\cvar_\alpha$ in the offset is
+$2W$, which ignores that the membership of $T_\alpha$ changes as the offset
+moves. Writing $m_c$ for the tail mass and $\Sigma_\tau$ for the covariance
+of the error coordinates in a narrow band around the VaR level, with
+$\rho_\tau$ the density of loss there, the correct curvature is
+\begin{equation}
+H=\frac{m_c}{\alpha}\,2W+\frac{4\rho_\tau}{\alpha}\,W\Sigma_\tau W .
+\tag{S-hess}
+\end{equation}
+The band is widened adaptively until it contains enough draws to estimate
+$\Sigma_\tau$, and a flag is raised when it cannot. The boundary term is not
+a refinement: omitting it over-predicts the gain by $315\%$ in a brute-force
+comparison on the synthetic reduced model, which is how the error was found.
+
+\emph{(ii) Reachability.} The offset must lie in
+$\mathcal{B}=\operatorname{range}(\partial\epsilon/\partial c)$, computed by
+finite differences on the control coefficients and whitened in the $W$
+metric. On the real simulator this projector has rank $2$ of $3$ at every
+point---one error coordinate is unreachable---though the measured
+displacement already lies in $\mathcal{B}$ to machine precision
+($\mathrm{reach\ frac}=1.000$), so the rank deficiency is not the source of
+the calibration constant.
+
+\emph{(iii) Step length.} Rather than trusting the quadratic, the step is set
+by a line search of $\cvar_\alpha$ along $d_\alpha$ over a seven-decade
+two-sided grid with local refinement. Because the search and the evaluation
+would otherwise use the same draws, the search is cross-fitted. The fold
+split is mixture-aware: splitting naively puts a rare atom entirely in one
+fold, leaving that fold with no heavy tail and a spurious gain, so responsive
+draws are split while inert branches are kept in both folds with renormalized
+weights.
+
+We report three nested statistics per point. $R_{\mathrm{pred}}^{\mathrm{simple}}$
+uses $H=2W$ and no line search; $R_{\mathrm{pred}}^{\mathrm{quad}}$ uses
+Eq.~(S-hess); and $R_{\mathrm{pred}}$ adds the cross-fitted line search.
+Against a brute-force re-optimization on the synthetic model their relative
+errors are $+315\%$, $\{16,77,47\}\%$ and $\{0.6,3.3,4.4\}\%$ at
+$\kappa=\{0.1,0.25,0.5\}$. Only the last is used for the calibration in the
+main text.
+
+\subsection{Resolution floor}
+
+A displacement estimated from $\alpha K$ draws has sampling scatter even when
+the true gain is zero, so every point carries a floor $R_{\min}$ built from
+the band statistics and the effective tail count, and a point is called
+resolved when $R_{\mathrm{pred}}>R_{\min}$. On $24$ independent null draw sets
+the floor matches the empirical scatter to a ratio of $0.75$. The floor
+drives the test-ensemble size: the working rule is
+$\alpha_{\min}\,n_{\mathrm{test}}\gtrsim400$, which with
+$\alpha_{\min}=0.025$ gives $n_{\mathrm{test}}=50\,000$ and is enforced
+rather than advised. The training ensemble obeys a separate rule,
+$\alpha_{\min}K_{\mathrm{train}}\ge8$, because the CVaR objective's gradient
+is built only from its own training tail; at the default
+$K_{\mathrm{train}}=128$ that is $3.2$ draws at $\alpha=0.025$. One matched
+ensemble is shared by the mean, CVaR and reverse runs at a point, since
+giving the CVaR arm more data than its comparator would break the budget
+parity the fairness protocol rests on.
+
+\subsection{The shared basin pool}
+
+The comparator of Sec.~\ref{M-sec:equiv}---best of the mean control and the
+reverse warm starts---is not budget-neutral when the mean multistart has not
+converged. Using the criterion that no other control at a point beats the
+mean control on its own objective by more than $5\%$, only $6$ of $16$ cells
+were converged, the worst at a ratio of $0.250$. Choosing the comparator by
+lowest mean loss rather than lowest $\cvar$ gives numerically identical
+results at every point, so this is not selection on the outcome variable; it
+is an unequal restart budget.
+
+The pooled protocol collects every control any arm found at a point
+(nine, deduplicating to three or four), and runs each objective from each
+start, selecting each arm's winner on the validation ensemble by that arm's
+own risk measure. Table~\ref{tab:s13pool} shows the effect on the replicate
+scatter. Because every start is warm, the pooled pass costs roughly
+$\mathrm{len(pool)}\times5$ single optimizations against the $36$ the
+original point cost.
+
+\subsection{Gating}
+
+Two gates are applied and both are reported alongside the ungated statistics.
+
+For the direction test, a point enters if it is resolved, if the CVaR arm did
+not find a better mean optimum than the mean control (mean-loss ratio
+$\ge0.95$), and if $|R^{\mathrm{raw}}|>0.005$. The first two conditions say
+that the CVaR control is a local displacement of the mean control rather than
+a different basin; the third says there is a displacement at all. This
+removes $4$ to $6$ of $16$ points depending on $\alpha$. The pass criterion
+is significant anti-alignment---no point with $\cos<0$ whose null probability
+is below $0.05$---rather than a minimum cosine, since in three dimensions
+$\cos$ is uniform on $[-1,1]$ under the null and a single low value carries
+almost no information.
+
+For the level test, no gating is applied: all $16$ points enter at every
+$\alpha$, and the same-basin and raw-comparator variants are reported beside
+the pooled one.
+
+\subsection{The two leverage arms}
+
+The relaxation arm is analytic. Stage~5 never sampled jumps; it used the
+exact no-jump/one-jump decomposition, recording $(p,\ell_j,\E L_c)$ and hence
+$\beta$ per cell. The reconstruction appends one atom of weight $p$ carrying
+loss $\ell_j$, with its error coordinates pinned at $\epsilon_0$ so that it
+contributes nothing to the displacement, and rescales $\ell_j$ so that the
+re-derived cell's $\beta$ matches the recorded one---$\beta$, not the
+absolute jump loss, being the invariant Proposition~\ref{M-prop:mixture} is
+written in. Two cells at $\kappa=7.4$ are excluded from the identity test as
+far outside the perturbative regime; they satisfy it anyway. We note that
+cells sharing $(T_g,\sigma_\phi^2,\text{seed},\text{levels})$ but differing
+in $T_1$ produce identical re-derived controls, since $T_1$ does not enter
+the dephasing bulk---so the $14$ rows are $7$ distinct bulk controls paired
+with two relaxation rates, and the effective count for any statement about
+the bulk is $7$.
+
+The fluctuator arm installs a two-state telegraph process in the simulator,
+so that the optimizer, the losses and the propagators all see it, and sweeps
+two axes: excursion amplitude at fixed rarity, and rarity at fixed amplitude.
+At each point the predictor is evaluated twice---once on the mixture and once
+on the same control restricted to the non-fluctuator draws---so the
+suppression ratio is taken at one control and one $\kappa$ and is not
+confounded by the fact that amplitude drives $\kappa$ and rarity in opposite
+directions. A rank correlation between $\Lambda$ and $R_{\mathrm{pred}}$
+across an amplitude sweep is $-1$ by construction and is reported only to
+make that visible.
+
+\subsection{Validation}
+
+Twelve checks run without the simulator and are required to pass before any
+point is computed: exact atomic $\cvar$ at four $\alpha$; the vanishing of
+the debiased displacement in the linear-Gaussian limit and the $1/K$ decay of
+the raw bias; the closed form against brute-force re-optimization at three
+$\kappa$; the predicted direction; the $\kappa^2$ onset; two leverage checks
+against brute force; the floor against empirical null scatter; the two
+closed-form identities for $\rho_\alpha$; and the mixture identity of
+Eq.~\eqref{M-eq:suppression} against its analytic form, which agrees to $2.4\%$
+and reproduces the multiplicative relation to $1.0\%$ on the synthetic model.
+
+\begin{table}[t]
+\caption{Replicate scatter in the measured gain between the two seeds, before
+and after equalizing the restart budget. The pooled protocol removes almost
+all of it, which is why the slope in Table~\ref{M-tab:stage6} is a calibration
+rather than noise.}
+\label{tab:s13pool}
+\begin{ruledtabular}
+\begin{tabular}{lcccc}
+$\alpha$ & 0.20 & 0.10 & 0.05 & 0.025 \\ \hline
+best-of-comparator & 0.272 & 0.249 & 0.178 & 0.136 \\
+shared basin pool  & 0.010 & 0.016 & 0.033 & 0.019 \\
+reduction factor   & 26.8  & 15.2  & 5.4   & 7.1   \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+% =====================================================================
+\section{Per-point results}
+\label{sec:fulltable}
+\subsection{All validated comparisons (E1--E8)}
+Every cell is re-evaluated in the full Lindblad model on the test ensemble.
+$\Rt$ is against the best mean control; ``same-budget'' is against the
+multistart mean control alone; ``upgraded'' marks cells in which a reverse
+start improved the comparator by more than 0.1\%. $T_g$ in ns,
+$\sigma_\delta/2\pi$ in MHz. Point labels: \emph{Tg}, gate-time sweep;
+\emph{2lv}, two levels; \emph{sig}, phase-variance sweep.
+\begin{center}\scriptsize\setlength{\tabcolsep}{3pt}
+\input{figures/appendix_table.tex}
+\end{center}
+
+\subsection{Dominance test (E9)}
+Closed-system statistics over each candidate pool (fresh 4000-draw ensemble)
+and the full-Lindblad $\Rt(0.05)$ of the standard comparison against the best
+mean control. $\kappa$: second-order ratio of the mean control. $\tau$:
+Kendall $\tau$ between mean and $\cvar_{0.05}$ rankings. Rev.: fraction of
+confirmed rank reversals. Dom.: fraction of mean-separated pairs crossing for
+$q\ge0.5$. Ratio: median $\cvar_{0.05}/$mean (prediction $5.58$).
+$R_{\rm pool}$: cross-fitted pool regret. $^{\circ}$Comparator upgraded by a
+reverse start.
+{\scriptsize\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}rrrrrrrrrrr@{}}
+\toprule
+Lev. & $T_g$ & seed & $\sigma_\phi^2$ & $\kappa$ & $\tau$ & Rev. & Dom. & Ratio & $R_{\rm pool}$ & $\Rt$ Lindblad\\
+\midrule
+\endhead
+2 & 8 & 0 & 0.0016 & 0.01 & 0.98 & 0.000 & 0.000 & 5.60 & $+0.000$ & $-0.001$$^{\circ}$ \\
+2 & 8 & 0 & 0.0064 & 0.03 & 0.95 & 0.000 & 0.000 & 5.59 & $+0.000$ & $-0.014$$^{\circ}$ \\
+2 & 8 & 0 & 0.04 & 0.07 & 0.80 & 0.001 & 0.000 & 5.52 & $+0.003$ & $+0.001$$^{\circ}$ \\
+2 & 8 & 0 & 0.16 & 0.13 & 0.62 & 0.095 & 0.054 & 5.37 & $+0.022$ & $+0.017$$^{\circ}$ \\
+2 & 8 & 0 & 0.41 & 0.21 & 0.47 & 0.226 & 0.256 & 4.95 & $+0.053$ & $+0.052$$^{\circ}$ \\
+2 & 8 & 0 & 1.6 & 0.43 & 0.62 & 0.165 & 0.269 & 9.81 & $+0.178$ & $+0.191$$^{\circ}$ \\
+2 & 12.7 & 0 & 0.0016 & 0.01 & 0.94 & 0.000 & 0.000 & 5.60 & $+0.000$ & $-0.001$$^{\circ}$ \\
+2 & 12.7 & 1 & 0.0016 & 0.01 & 0.90 & 0.000 & 0.000 & 5.59 & $+0.000$ & $-0.040$$^{\circ}$ \\
+2 & 12.7 & 2 & 0.0016 & 0.01 & 0.97 & 0.000 & 0.000 & 5.49 & $+0.000$ & $-0.032$$^{\circ}$ \\
+2 & 12.7 & 0 & 0.0064 & 0.03 & 0.95 & 0.000 & 0.000 & 5.59 & $+0.000$ & $-0.002$ \\
+2 & 12.7 & 1 & 0.0064 & 0.03 & 0.95 & 0.000 & 0.000 & 5.59 & $+0.001$ & $-0.013$ \\
+2 & 12.7 & 2 & 0.0064 & 0.03 & 0.95 & 0.000 & 0.000 & 5.49 & $+0.001$ & $+0.001$ \\
+2 & 12.7 & 0 & 0.04 & 0.08 & 0.83 & 0.001 & 0.000 & 5.51 & $+0.002$ & $+0.003$$^{\circ}$ \\
+2 & 12.7 & 1 & 0.04 & 0.08 & 0.87 & 0.008 & 0.000 & 5.52 & $+0.003$ & $-0.040$$^{\circ}$ \\
+2 & 12.7 & 2 & 0.04 & 0.08 & 0.86 & 0.005 & 0.000 & 5.46 & $-0.001$ & $-0.001$$^{\circ}$ \\
+2 & 12.7 & 0 & 0.16 & 0.15 & 0.65 & 0.125 & 0.040 & 5.50 & $+0.032$ & $+0.027$$^{\circ}$ \\
+2 & 12.7 & 1 & 0.16 & 0.15 & 0.68 & 0.123 & 0.050 & 5.37 & $+0.028$ & $+0.001$$^{\circ}$ \\
+2 & 12.7 & 2 & 0.16 & 0.15 & 0.63 & 0.105 & 0.052 & 5.38 & $+0.034$ & $+0.033$ \\
+2 & 12.7 & 0 & 0.41 & 0.25 & 0.59 & 0.190 & 0.192 & 5.36 & $+0.079$ & $+0.072$ \\
+2 & 12.7 & 1 & 0.41 & 0.25 & 0.55 & 0.238 & 0.273 & 5.46 & $+0.072$ & $+0.044$$^{\circ}$ \\
+2 & 12.7 & 2 & 0.41 & 0.25 & 0.57 & 0.198 & 0.156 & 5.29 & $+0.090$ & $+0.089$$^{\circ}$ \\
+2 & 12.7 & 0 & 1.6 & 0.52 & 0.29 & 0.364 & 0.468 & 4.82 & $+0.309$ & $+0.274$$^{\circ}$ \\
+2 & 12.7 & 1 & 1.6 & 0.50 & 0.34 & 0.315 & 0.361 & 4.85 & $+0.292$ & $+0.276$$^{\circ}$ \\
+2 & 12.7 & 2 & 1.6 & 0.52 & 0.10 & 0.452 & 0.607 & 4.61 & $+0.309$ & $+0.290$ \\
+2 & 20 & 0 & 0.0016 & 0.01 & 0.98 & 0.000 & 0.000 & 5.60 & $+0.000$ & $-0.011$$^{\circ}$ \\
+2 & 20 & 0 & 0.0064 & 0.03 & 0.95 & 0.000 & 0.000 & 5.59 & $-0.002$ & $-0.001$ \\
+2 & 20 & 0 & 0.04 & 0.07 & 0.83 & 0.002 & 0.000 & 5.58 & $+0.003$ & $+0.001$$^{\circ}$ \\
+2 & 20 & 0 & 0.16 & 0.14 & 0.56 & 0.135 & 0.027 & 5.54 & $+0.028$ & $+0.022$$^{\circ}$ \\
+2 & 20 & 0 & 0.41 & 0.23 & 0.58 & 0.167 & 0.177 & 5.43 & $+0.071$ & $+0.062$$^{\circ}$ \\
+2 & 20 & 0 & 1.6 & 0.48 & 0.10 & 0.473 & 0.675 & 11.04 & $+0.342$ & $+0.353$$^{\circ}$ \\
+4 & 12.7 & 0 & 0.0016 & 0.01 & 0.92 & 0.009 & 0.013 & 1.88 & $+0.001$ & $-0.003$$^{\circ}$ \\
+4 & 12.7 & 0 & 0.0064 & 0.02 & 0.90 & 0.010 & 0.015 & 3.06 & $+0.002$ & $-0.013$$^{\circ}$ \\
+4 & 12.7 & 0 & 0.04 & 0.04 & 0.85 & 0.018 & 0.007 & 4.73 & $+0.014$ & $-0.008$ \\
+4 & 12.7 & 0 & 0.16 & 0.08 & 0.71 & 0.068 & 0.055 & 5.17 & $+0.040$ & $+0.027$ \\
+4 & 12.7 & 0 & 0.41 & 0.12 & 0.57 & 0.175 & 0.229 & 5.04 & $+0.081$ & $+0.068$ \\
+4 & 12.7 & 0 & 1.6 & 0.26 & 0.55 & 0.165 & 0.232 & 4.15 & $+0.048$ & $+0.042$$^{\circ}$ \\
+4 & 20.8 & 0 & 0.0016 & 0.01 & 0.96 & 0.002 & 0.000 & 1.75 & $+0.000$ & $-0.002$$^{\circ}$ \\
+4 & 20.8 & 0 & 0.0064 & 0.02 & 0.95 & 0.001 & 0.000 & 2.59 & $+0.001$ & $-0.000$$^{\circ}$ \\
+4 & 20.8 & 0 & 0.04 & 0.06 & 0.74 & 0.046 & 0.026 & 3.32 & $+0.029$ & $+0.016$$^{\circ}$ \\
+4 & 20.8 & 0 & 0.16 & 0.12 & 0.49 & 0.220 & 0.266 & 4.67 & $+0.123$ & $+0.104$$^{\circ}$ \\
+4 & 20.8 & 0 & 0.41 & 0.20 & 0.20 & 0.380 & 0.527 & 5.16 & $+0.278$ & $+0.274$ \\
+4 & 20.8 & 0 & 1.6 & 0.38 & 0.19 & 0.397 & 0.579 & 4.93 & $+0.231$ & $+0.240$ \\
+\bottomrule
+\end{longtable}}
+% =====================================================================
+% =====================================================================
+\section{Reproducibility}
+\label{sec:repro}
+
+\subsection{Code}
+
+All code is plain Python 3 with NumPy and SciPy (plus Matplotlib for the
+figures). Every step writes machine-readable output (JSON, CSV and NPZ with
+the full control vectors and per-draw test losses), so every table and figure
+can be regenerated from saved data without re-running an optimization.
+
+\begin{center}\small
+\begin{tabular}{@{}p{0.27\textwidth}p{0.66\textwidth}@{}}
+\toprule
+File & Role\\
+\midrule
+\texttt{fade\_realistic.py} & transmon model, thermal state, Butterworth filter matrix, Hann seed pulse, worker pool\\
+\texttt{stage0.py} & per-draw full-Lindblad worker with exact (Van Loan) gradients\\
+\texttt{stage0\_v2.py} & configuration, noise ensembles (with correlation), CVaR weights, bounded pulse basis, optimizer, fairness protocol, paired bootstrap, Stage-0 steps\\
+\texttt{fast\_viper.py} & closed-system Daleckii--Krein simulator, continuation starts, self-test against Lindblad, full-Lindblad \texttt{validate} step with the best-mean comparator\\
+\texttt{stage1.py} & Stage-1 \texttt{channels} runs and the \texttt{diagnose} step (error rotation vectors, loss-quadratic fits, error clouds)\\
+\texttt{run\_final.sh} & the final Stage-0 batch (collapse test, replication, strong search, validation)\\
+\texttt{make\_figures.py} & Stage-0 figures and the Sec.~\ref{sec:fulltable} table\\
+\texttt{make\_stage1\_figures.py} & $\kappa$, reduced model, offsets, independence test\\
+\texttt{make\_paper\_extras.py} & explanatory figures, pulses, loss distributions, error clouds, simulator check\\
+\texttt{stage2.py}, \texttt{run\_stage2.sh} & Stage-2 candidate pools and dominance statistics\\
+\texttt{make\_stage2\_figures.py} & Stage-2 figures, revised dominance test, $\kappa$, table\\
+\texttt{make\_kappa\_bound.py} & the $\kappa^2$ law: closed-form coefficients, the scalar and random-geometry checks, and the comparison with every diagnosed control\\
+\texttt{stage3.py}, \texttt{run\_stage3.sh} & the controlled $\kappa$ experiment, leakage-aware diagnosis and the generality grid\\
+\texttt{stage3\_recomp.py} & applies the best-mean comparator to the saved closed-system losses\\
+\texttt{make\_stage3\_figures.py} & Stage-3 figures and the partial-correlation analysis\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph*{Built-in checks.} \texttt{stage0\_v2.py selftest} and
+\texttt{fast\_viper.py selftest} must pass before any production run. They
+check gradients against finite differences, the closed-system model against
+the Lindblad code with dissipation switched off ($10^{-7}$), that dissipation
+acts as a near-constant shift, and that the CVaR weights reproduce the exact
+estimator. \texttt{stage1.py} refuses to run with an older version of the
+ensemble code that lacks the correlation parameter.
+
+\subsection{Commands}
+
+Stage~0 (from the project folder, 8 worker processes):
+\begin{verbatim}
+export FADE_WORKERS=8
+python fast_viper.py selftest                 # default outdir results_fast
+python fast_viper.py characterize             # leakage onset
+python fast_viper.py audit --Tg-audit 12.7
+python fast_viper.py sweep --Tg 6.337 7.351 8.529 9.894 11.479 12.7 \
+       15.449 20.793 32.467                   # E2, 4 levels
+python fast_viper.py sweep --levels 2 --Tg 6.337 12.7 15.449
+python fast_viper.py sweep --levels 2 --Tg 20.793 32.467 \
+       --outdir results_2lvl_long
+python fast_viper.py sweep --Tg 12.7 15.449 20.793 --sigma-d-mhz 0 \
+       --outdir results_amp_only              # E3
+python fast_viper.py sweep --Tg 12.7 15.449 20.793 --sigma-a 0 \
+       --outdir results_det_only
+python fast_viper.py sigma --levels 2 --Tg-sigma 12.7 \
+       --sigma-grid 0.5 1 2.5 5 8 16          # E4 at 12.7 ns
+python fast_viper.py sweep --levels 2 --Tg 15.449 20.793 32.467 --restarts 20 \
+       --maxiter 1000 --outdir results_strong_2lvl
+bash run_final.sh 2>&1 | tee final_log.txt   # collapse, seeds, strong search
+\end{verbatim}
+(\texttt{fast\_viper.py} passes every step except \texttt{selftest} and
+\texttt{validate} to \texttt{stage0\_v2.py} with the fast simulator patched
+in.) \texttt{run\_final.sh}
+contains, among others,
+\begin{verbatim}
+python fast_viper.py sigma --levels 2 --Tg-sigma 8 \
+       --sigma-grid 1.41 3.98 7.96 12.57 25.17 --outdir results_collapse_T8
+python fast_viper.py sigma --levels 2 --Tg-sigma 20 \
+       --sigma-grid 0.56 1.59 3.18 5.03 10.07 --outdir results_collapse_T20
+python fast_viper.py audit --Tg-audit 12.7 --seed $s --outdir results_seed$s
+python fast_viper.py sweep --Tg 15.449 20.793 32.467 --restarts 20 \
+       --maxiter 1000 --outdir results_strong
+python fast_viper.py validate --outdir <folder>     # for every folder
+\end{verbatim}
+
+Stage~1 (2 levels, $T_g=12.7$~ns unless stated):
+\begin{verbatim}
+python stage1.py channels --sigma-a-grid 0.01 0.02 0.04 0.08 0.127
+python stage1.py channels --sigma-a-grid 0.127 \
+       --rho-grid -0.99 -0.9 -0.5 0.5 0.9 0.99
+python stage1.py channels --sigma-d-mhz 0 --sigma-a-grid 0.127
+python stage1.py channels --sigma-a-grid 0.08 --seed 1     # and --seed 2
+python stage1.py channels --sigma-a-grid 0.127 --rho-grid 0.99 --seed 1
+python fast_viper.py validate --outdir results_stage1
+python stage1.py diagnose results_stage1 results_fast ...
+\end{verbatim}
+\sloppy
+The prospective test (E8) used the same \texttt{channels} step at
+$\rho=0.99$ with (noise $\times0.25$)
+\texttt{--sigma-d-mhz 0.625
+--sigma-a-grid 0.03175}, (noise $\times0.5$) \texttt{--sigma-d-mhz 1.25
+--sigma-a-grid 0.0635}, and at matched phase variance
+\texttt{--Tg 8 --sigma-d-mhz 3.97 --sigma-a-grid 0.127} and
+\texttt{--Tg 20 --sigma-d-mhz 1.5875 --sigma-a-grid 0.127}, each followed by
+\texttt{validate} and \texttt{diagnose}. The restart seeds of a
+\texttt{channels} point depend on its position in the grid of that call and on
+\texttt{--seed}; they are recorded in each point's JSON output.
+
+Stage~2 (dominance test, overnight):
+\begin{verbatim}
+python stage2.py selftest                 # synthetic checks of every statistic
+bash run_stage2.sh 2>&1 | tee stage2_log.txt
+python stage2.py summary                  # per-point table
+\end{verbatim}
+\texttt{run\_stage2.sh} runs \texttt{stage2.py run} for the three grids of
+E9, then \texttt{validate}, \texttt{diagnose} and \texttt{summary}. The pool
+ensemble uses seed $44+1000s$.
+
+Figures and tables:
+\begin{verbatim}
+python make_figures.py              # Stage 0 figures, per-point table
+python make_stage1_figures.py       # kappa, model, offsets, independence
+python make_paper_extras.py         # explanatory and Stage-1 detail figures
+python make_stage2_figures.py       # Stage-2 figures, table, statistics
+\end{verbatim}
+
+\subsection{Seeds}
+
+Training, validation and test ensembles use seeds 11, 22 and 33, shifted by
+$1000s$ for replication seed $s$. Restart perturbations use a separate seed
+per objective and point. Bootstraps use 2000 resamples with seed 7 in the
+full-Lindblad validation. The reduced-model Monte Carlo uses $6\times10^4$
+draws with seed 1, and the pre-compensation toy $2\times10^6$ draws with
+seed 0.
+
+% =====================================================================
+\begin{thebibliography}{99}
+\bibitem{Rockafellar2000} R.~T.~Rockafellar and S.~Uryasev, Optimization of conditional value-at-risk, J.\ Risk \textbf{2}(3), 21 (2000).
+\bibitem{Acerbi2002} C.~Acerbi and D.~Tasche, On the coherence of expected shortfall, J.\ Bank.\ Finance \textbf{26}, 1487 (2002).
+\bibitem{Nielsen2002} M.~A.~Nielsen, A simple formula for the average gate fidelity of a quantum dynamical operation, Phys.\ Lett.\ A \textbf{303}, 249 (2002).
+\bibitem{Shaked2007} M.~Shaked and J.~G.~Shanthikumar, \emph{Stochastic Orders} (Springer, New York, 2007).
+\bibitem{Marshall2011} A.~W.~Marshall, I.~Olkin, and B.~C.~Arnold, \emph{Inequalities: Theory of Majorization and Its Applications}, 2nd ed.\ (Springer, New York, 2011).
+\bibitem{Koch2007} J.~Koch, T.~M.~Yu, J.~Gambetta, A.~A.~Houck, D.~I.~Schuster, J.~Majer, A.~Blais, M.~H.~Devoret, S.~M.~Girvin, and R.~J.~Schoelkopf, Charge-insensitive qubit design derived from the Cooper pair box, Phys.\ Rev.\ A \textbf{76}, 042319 (2007).
+\bibitem{Krantz2019} P.~Krantz, M.~Kjaergaard, F.~Yan, T.~P.~Orlando, S.~Gustavsson, and W.~D.~Oliver, A quantum engineer's guide to superconducting qubits, Appl.\ Phys.\ Rev.\ \textbf{6}, 021318 (2019).
+\bibitem{Motzoi2009} F.~Motzoi, J.~M.~Gambetta, P.~Rebentrost, and F.~K.~Wilhelm, Simple pulses for elimination of leakage in weakly nonlinear qubits, Phys.\ Rev.\ Lett.\ \textbf{103}, 110501 (2009).
+\bibitem{VanLoan1978} C.~F.~Van~Loan, Computing integrals involving the matrix exponential, IEEE Trans.\ Autom.\ Control \textbf{23}, 395 (1978).
+\bibitem{Higham2008} N.~J.~Higham, \emph{Functions of Matrices: Theory and Computation} (SIAM, Philadelphia, 2008).
+\bibitem{Byrd1995} R.~H.~Byrd, P.~Lu, J.~Nocedal, and C.~Zhu, A limited memory algorithm for bound constrained optimization, SIAM J.\ Sci.\ Comput.\ \textbf{16}, 1190 (1995).
+\bibitem{Efron1993} B.~Efron and R.~J.~Tibshirani, \emph{An Introduction to the Bootstrap} (Chapman \& Hall, New York, 1993).
+\end{thebibliography}
+
+\end{document}

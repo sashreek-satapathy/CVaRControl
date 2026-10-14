@@ -1,0 +1,124 @@
+{
+ "frozen": true,
+ "operating_point": {
+  "n": 3,
+  "sigma": 0.6,
+  "alpha": 0.2,
+  "reps": 16,
+  "K": 256,
+  "shots": 128,
+  "kappa_at_mean_optimal": 3.63,
+  "kappa_at_c0": 0.1325,
+  "surrogate_fit_R2": 0.963,
+  "regime": {
+   "e0_norm": 0.01587,
+   "A_norm": 0.0046,
+   "Q_norm": 0.01669,
+   "note": "standardised z = phi/sigma; refocused mean arm, so the linear term is the smallest of the three and kappa is ill-conditioned"
+  },
+  "R_true_single_gate": 0.1616,
+  "R_measured_emulated": 0.109,
+  "R_sd_emulated": 0.061,
+  "snr_emulated": 1.8,
+  "positive_in": "16/16 emulator repeats",
+  "windows_for_3sigma": "2-3 (combine independent windows; phi seed differs)",
+  "amplification_ceiling": {
+   "max_eps_at_operating_point": 3.131,
+   "pi": 3.1416,
+   "note": "the design sits just inside the axis-angle wrap by construction; selftest H7 fails if a change pushes it over"
+  },
+  "E0_null_reps": 1,
+  "E0_note": "the hard pulse is an EXACT echo at even reps (U^2 = -I for all phi), so E0 must run unamplified at reps=1 or the null is vacuous; |eps| reaches 0.8 rad there, well clear of the floor",
+  "seconds_two_arms_at_2000_per_s": 197,
+  "replication_point": {
+   "sigma": 0.3,
+   "kappa_at_mean_optimal": 5.44,
+   "surrogate_fit_R2": 0.99,
+   "R_pred": 0.172,
+   "shot_feasibility": "NOT yet emulated"
+  },
+  "predictor_delivery": {
+   "sigma_0.3": 1.0,
+   "sigma_0.6": 1.01,
+   "sigma_0.9": 1.02,
+   "note": "R_offset/R_pred with the step realised as dc = J^+ step at the OPTIMISED mean control. At the unoptimised c0 the same move gives a NEGATIVE R at every sigma -- the delivery fraction is a property of where you stand."
+  }
+ },
+ "experiments": {
+  "E0_null": {
+   "control": "hard pulse (c_hard)",
+   "kappa": "~0 (2e-16)",
+   "prediction": "R = 0 within the error bar",
+   "falsifies": "a substantial measured gain means the injected ensemble is not what we injected"
+  },
+  "E1_characterise": {
+   "control": "pooled mean-optimal",
+   "measure": "eps_k, L_k, mean L, CVaR_alpha, d_alpha",
+   "prediction": "R_pred = 0.17 +- 0.01"
+  },
+  "E2_predictor_PRIMARY": {
+   "control": "mean-optimal + dc = J^+ step, step from E1's OWN measured d_alpha",
+   "prediction": "R_offset / R_pred = 1.0, and R_offset > 0",
+   "note": "this is the primary endpoint: a measurement-only quantity predicting where tail-risk control departs is the novel Stage 6 claim, not that CVaR differs"
+  },
+  "E3_arm_vs_arm": {
+   "control": "pooled CVaR-optimal",
+   "prediction": "R = 0.134 +- 0.049, R/R_pred ~ 0.95",
+   "note": "secondary: confirms the gain is real, but uses a control optimised offline"
+  },
+  "E4_replication": {
+   "sigma": 0.3,
+   "prediction": "R_pred = 0.172, delivery 1.00",
+   "note": "shot feasibility not yet emulated at this sigma"
+  }
+ },
+ "discriminator": "mean_loss_change must be POSITIVE at E2 and E3; a negative value means the mean arm was not converged and the gain is baseline slack, not a tail trade",
+ "analysis_frozen": {
+  "debias": "subtract 3/(6*shots) from each L before forming CVaR",
+  "cvar": "atomic upper-tail CVaR, as in every prior stage",
+  "pairing": "the SAME phi draws across all arms"
+ },
+ "budget": {
+  "K": 256,
+  "shots": 128,
+  "arms": 3,
+  "circuits": 4608,
+  "shots_total": 589824,
+  "seconds": 294.912,
+  "windows": 0.49151999999999996,
+  "fits_one_window": true
+ },
+ "calibration": [
+  {
+   "id": "C1 RX(pi) is a pi pulse",
+   "circuits": "RX(pi) on |0>, measure Z, 1024 shots",
+   "expect": "P(1) = 1 - 2e_ro within a few 1e-3",
+   "fails_like": "a miscalibrated pi pulse looks like a static e0 offset, which is exactly the quantity the predictor keys on"
+  },
+  {
+   "id": "C2 fractional RX(theta) is monotone and linear in theta",
+   "circuits": "RX(theta) on |0> for theta in 0..pi in 13 steps, measure Z",
+   "expect": "P(1) = sin^2(theta/2) to a percent",
+   "fails_like": "if fractional gates are silently synthesised from pi/2 pulses the control family is not the one we optimised over and every theta_i means something else"
+  },
+  {
+   "id": "C3 RZ really is virtual",
+   "circuits": "RY(pi/2), RZ(psi), RY(-pi/2) on |0> for psi in 0..2pi, measure Z; and a long RZ chain of 200 with net angle 0",
+   "expect": "cos(psi) curve; the null chain returns |0> with no extra loss",
+   "fails_like": "if RZ costs time or error the injected ensemble picks up a decoherence background that scales with |phi|, which mimics a tail"
+  },
+  {
+   "id": "C4 six-circuit Bloch reconstruction returns a known gate",
+   "circuits": "the six-circuit set with c = c0, phi = 0, 1024 shots",
+   "expect": "reconstructed eps within 3 sigma_shot of 0",
+   "fails_like": "a basis-change sign error flips a component of d_alpha and the predicted step points the wrong way"
+  },
+  {
+   "id": "C5 throughput",
+   "circuits": "10 circuits x 256 shots, batched as the science run will be",
+   "expect": "record reported usage; pass it as --throughput",
+   "fails_like": "the 2000 shots/s default is a guess and the budget is linear in it"
+  }
+ ],
+ "sha256": "8c15f753d60280f7a45febbadfc487c1de5410b8b242d7e5be71012603df5e1c"
+}

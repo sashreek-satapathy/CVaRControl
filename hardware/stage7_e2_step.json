@@ -1,0 +1,93 @@
+{
+ "source_raw": "raw_mean_1790502945.json",
+ "reps": 16,
+ "shots": 128,
+ "operating_point": {
+  "n": 3,
+  "sigma": 0.6,
+  "alpha": 0.2,
+  "reps": 16,
+  "K": 256,
+  "shots": 128,
+  "kappa_at_mean_optimal": 3.63,
+  "kappa_at_c0": 0.1325,
+  "surrogate_fit_R2": 0.963,
+  "regime": {
+   "e0_norm": 0.01587,
+   "A_norm": 0.0046,
+   "Q_norm": 0.01669,
+   "note": "standardised z = phi/sigma; refocused mean arm, so the linear term is the smallest of the three and kappa is ill-conditioned"
+  },
+  "R_true_single_gate": 0.1616,
+  "R_measured_emulated": 0.109,
+  "R_sd_emulated": 0.061,
+  "snr_emulated": 1.8,
+  "positive_in": "16/16 emulator repeats",
+  "windows_for_3sigma": "2-3 (combine independent windows; phi seed differs)",
+  "amplification_ceiling": {
+   "max_eps_at_operating_point": 3.131,
+   "pi": 3.1416,
+   "note": "the design sits just inside the axis-angle wrap by construction; selftest H7 fails if a change pushes it over"
+  },
+  "E0_null_reps": 1,
+  "E0_note": "the hard pulse is an EXACT echo at even reps (U^2 = -I for all phi), so E0 must run unamplified at reps=1 or the null is vacuous; |eps| reaches 0.8 rad there, well clear of the floor",
+  "seconds_two_arms_at_2000_per_s": 197,
+  "replication_point": {
+   "sigma": 0.3,
+   "kappa_at_mean_optimal": 5.44,
+   "surrogate_fit_R2": 0.99,
+   "R_pred": 0.172,
+   "shot_feasibility": "NOT yet emulated"
+  },
+  "predictor_delivery": {
+   "sigma_0.3": 1.0,
+   "sigma_0.6": 1.01,
+   "sigma_0.9": 1.02,
+   "note": "R_offset/R_pred with the step realised as dc = J^+ step at the OPTIMISED mean control. At the unoptimised c0 the same move gives a NEGATIVE R at every sigma -- the delivery fraction is a property of where you stand."
+  }
+ },
+ "c_mean": [
+  2.088876869994799,
+  2.0889651069616395,
+  -1.0526140184323745,
+  0.01342761168252681,
+  0.013427691748655263,
+  -0.013428839802089605
+ ],
+ "c_live": [
+  2.088876869994799,
+  2.0889651069616395,
+  -1.0526140184323745,
+  0.01342761168252681,
+  0.013427691748655263,
+  -0.013428839802089605
+ ],
+ "dc_live": [
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0
+ ],
+ "predictor": {
+  "d": [
+   0.007174681225645463,
+   0.000434776478818942,
+   0.002148277848437925
+  ],
+  "step": [
+   -0.0,
+   -0.0,
+   -0.0
+  ],
+  "t_best": 0.0,
+  "R_pred": 0.0,
+  "cvar_0": 0.0003666934271914069,
+  "n_tail": 52,
+  "mean_loss_change": 0.0,
+  "tail_specific": false,
+  "at_grid_edge": false
+ },
+ "reachable_rank": 3
+}
